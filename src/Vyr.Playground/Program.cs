@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Linq;
 using Vyr.Hosting;
 
@@ -8,6 +9,8 @@ namespace Vyr.Playground
     {
         static void Main(string[] args)
         {
+            JsonConvert.DeserializeObject("{}");
+
             var host = new InProcessHost();
             host.Up();
 

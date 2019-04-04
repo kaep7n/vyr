@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Vyr.Hosting
@@ -15,9 +16,12 @@ namespace Vyr.Hosting
             var type = assembly.GetType("Vyr.Program");
             var program = Activator.CreateInstance(type);
 
-            var main = type.GetMethod("Main");
+            var parameters = new Type[] { typeof(string[]) };
+            var main = type.GetRuntimeMethods().FirstOrDefault(m => m.Name == "Main");
 
-            main.Invoke(program, new object[] { });
+            var args = new object[] { new string[] { } };
+
+            var result = main.Invoke(program, args);
         }
 
         public void Down()
