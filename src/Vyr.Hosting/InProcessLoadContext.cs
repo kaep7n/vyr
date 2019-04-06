@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
@@ -8,20 +9,21 @@ namespace Vyr.Hosting
 {
     public class InProcessLoadContext : AssemblyLoadContext
     {
-        public InProcessLoadContext()
+        private readonly string workingDirectory;
+
+        public InProcessLoadContext(string workingDirectory)
             : base(true)
         {
+            this.workingDirectory = workingDirectory;
         }
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"Loading {assemblyName.Name}");
-            Console.ForegroundColor = ConsoleColor.Gray;
+            var assemblyPath = Path.Combine(this.workingDirectory, $"{assemblyName.Name}.dll");
 
-            if (assemblyName.Name.StartsWith("Vyr") || assemblyName.Name.StartsWith("Newton"))
+            if (File.Exists(assemblyPath))
             {
-                return this.LoadFromAssemblyPath($@"C:\Users\kaept\source\repos\kaep7n\vyr\src\Vyr\bin\Debug\netcoreapp3.0\{assemblyName.Name}.dll");
+                return this.LoadFromAssemblyPath(assemblyPath);
             }
             else
             {

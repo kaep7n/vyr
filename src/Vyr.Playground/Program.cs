@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Vyr.Hosting;
 
@@ -9,23 +9,42 @@ namespace Vyr.Playground
     {
         static void Main(string[] args)
         {
-            JsonConvert.DeserializeObject("{}");
+            var workingConsoleDirectory = @"C:\Users\kaept\Source\Repos\kaep7n\vyr\src\Vyr.Tests.Console\bin\Debug\netcoreapp3.0";
+            var workingLibraryDirectory = @"C:\Users\kaept\Source\Repos\kaep7n\vyr\src\Vyr.Tests.Library\bin\Debug\netcoreapp3.0";
 
-            var host = new InProcessHost();
-            host.Up();
+            var consoleHost = new InProcessHost(workingConsoleDirectory, "Vyr.Tests.Console");
+            var libraryHost = new InProcessHost(workingLibraryDirectory, "Vyr.Tests.Library");
 
-            WriteAllAssemblies();
+            string input;
 
-            Console.WriteLine("Host is up");
+            do
+            {
+                try
+                {
+                    consoleHost.Up();
+                    Console.WriteLine("Console Host is up");
+                    consoleHost.Down();
+                    Console.WriteLine("Console Host is down");
 
-            host.Down();
-            GC.Collect();
+                    //libraryHost.Up();
+                    //Console.WriteLine("Library Host is up");
+                    //libraryHost.Down();
+                    //Console.WriteLine("Library Host is down");
 
-            WriteAllAssemblies();
-
-            Console.WriteLine("Host is down");
-
-            Console.ReadLine();
+                    WriteAllAssemblies();
+                }
+                catch (Exception exception)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(exception.Message);
+                    Console.ForegroundColor = ConsoleColor.Gray;
+                }
+                finally
+                {
+                    input = Console.ReadLine();
+                }
+            }
+            while (input != "exit");
         }
 
         private static void WriteAllAssemblies()
@@ -37,6 +56,5 @@ namespace Vyr.Playground
                 Console.WriteLine(assembly.FullName);
             }
         }
-
     }
 }

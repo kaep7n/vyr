@@ -1,32 +1,60 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace Vyr.Hosting
 {
     public class InProcessHost : IHost
     {
-        private InProcessLoadContext loadContext;
+        private readonly string workingDirectory;
+        private readonly string name;
 
+        private WeakReference loadContextReference = null;
+
+        public InProcessHost(string workingDirectory, string name)
+        {
+            this.workingDirectory = workingDirectory;
+            this.name = name;
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public void Up()
         {
-            this.loadContext = new InProcessLoadContext();
-            var assembly = this.loadContext.LoadFromAssemblyName(new AssemblyName("Vyr"));
+            var inProcessLoadContext = new InProcessLoadContext(this.workingDirectory);
+            this.loadContextReference = new WeakReference(inProcessLoadContext, true);
 
-            var type = assembly.GetType("Vyr.Program");
-            var program = Activator.CreateInstance(type);
+            var assembly = inProcessLoadContext.LoadFromAssemblyName(new AssemblyName(this.name));
 
-            var parameters = new Type[] { typeof(string[]) };
-            var main = type.GetRuntimeMethods().FirstOrDefault(m => m.Name == "Main");
+            if (assembly.EntryPoint != null)
+            {
+                var args = new object[1] { new string[] { } };
+                assembly.EntryPoint.Invoke(null, args);
+            }
+            //else
+            //{
+            //    var type = assembly.GetTypes().First(t => t.Name == "Process");
+            //    var instance = Activator.CreateInstance(type);
 
-            var args = new object[] { new string[] { } };
-
-            var result = main.Invoke(program, args);
+            //    type.GetMethod("Run").Invoke(instance, null);
+            //}
         }
 
         public void Down()
         {
-            this.loadContext.Unload();
+            var inProcessLoadContext = this.loadContextReference.Target as InProcessLoadContext;
+
+            inProcessLoadContext.Unload();
+
+           while(this.loadContextReference.IsAlive)
+            {
+                GC.Collect();
+                GC.WaitForPendingFinalizers();
+
+                Console.WriteLine("alive");
+            }
+
+            Console.WriteLine("dead");
         }
     }
 }
