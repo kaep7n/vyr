@@ -18,6 +18,8 @@ namespace Vyr.Hosting
             this.name = name;
         }
 
+        public bool IsAlive => this.loadContextReference.IsAlive;
+
         [MethodImpl(MethodImplOptions.NoInlining)]
         public void Up()
         {
@@ -31,13 +33,13 @@ namespace Vyr.Hosting
                 var args = new object[1] { new string[] { } };
                 assembly.EntryPoint.Invoke(null, args);
             }
-            //else
-            //{
-            //    var type = assembly.GetTypes().First(t => t.Name == "Process");
-            //    var instance = Activator.CreateInstance(type);
+            else
+            {
+                var type = assembly.GetTypes().First(t => t.Name == "Process");
+                var instance = Activator.CreateInstance(type);
 
-            //    type.GetMethod("Run").Invoke(instance, null);
-            //}
+                type.GetMethod("Run").Invoke(instance, null);
+            }
         }
 
         public void Down()
@@ -45,16 +47,6 @@ namespace Vyr.Hosting
             var inProcessLoadContext = this.loadContextReference.Target as InProcessLoadContext;
 
             inProcessLoadContext.Unload();
-
-           while(this.loadContextReference.IsAlive)
-            {
-                GC.Collect();
-                GC.WaitForPendingFinalizers();
-
-                Console.WriteLine("alive");
-            }
-
-            Console.WriteLine("dead");
         }
     }
 }

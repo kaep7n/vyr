@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Hosting", "Vyr.Hosting\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Playground", "Vyr.Playground\Vyr.Playground.csproj", "{D659C299-D348-4729-91EF-BB86FADA02BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Tests.Library", "Vyr.Tests.Library\Vyr.Tests.Library.csproj", "{655576F8-B2C4-4943-AE98-6A97FD48BAEC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Tests.Library", "Vyr.Tests.Library\Vyr.Tests.Library.csproj", "{655576F8-B2C4-4943-AE98-6A97FD48BAEC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Tests.Console", "Vyr.Tests.Console\Vyr.Tests.Console.csproj", "{08405A91-F6BA-4618-AC36-893EA4B6C6A3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Tests.Console", "Vyr.Tests.Console\Vyr.Tests.Console.csproj", "{08405A91-F6BA-4618-AC36-893EA4B6C6A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Playground.AssemblyLoading", "Vyr.Playground.AssemblyLoading\Vyr.Playground.AssemblyLoading.csproj", "{C524BF47-A31B-451A-A1CE-B991FC97E043}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{08405A91-F6BA-4618-AC36-893EA4B6C6A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08405A91-F6BA-4618-AC36-893EA4B6C6A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08405A91-F6BA-4618-AC36-893EA4B6C6A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C524BF47-A31B-451A-A1CE-B991FC97E043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C524BF47-A31B-451A-A1CE-B991FC97E043}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C524BF47-A31B-451A-A1CE-B991FC97E043}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C524BF47-A31B-451A-A1CE-B991FC97E043}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

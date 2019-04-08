@@ -26,10 +26,30 @@ namespace Vyr.Playground
                     consoleHost.Down();
                     Console.WriteLine("Console Host is down");
 
-                    //libraryHost.Up();
-                    //Console.WriteLine("Library Host is up");
-                    //libraryHost.Down();
-                    //Console.WriteLine("Library Host is down");
+                    libraryHost.Up();
+                    Console.WriteLine("Library Host is up");
+                    libraryHost.Down();
+                    Console.WriteLine("Library Host is down");
+
+                    while (consoleHost.IsAlive)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+
+                        Console.WriteLine("console alive");
+                    }
+
+                    Console.WriteLine("console dead");
+
+                    while (libraryHost.IsAlive)
+                    {
+                        GC.Collect();
+                        GC.WaitForPendingFinalizers();
+
+                        Console.WriteLine("lib alive");
+                    }
+
+                    Console.WriteLine("lib dead");
 
                     WriteAllAssemblies();
                 }
