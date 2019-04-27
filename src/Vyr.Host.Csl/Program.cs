@@ -7,11 +7,9 @@ namespace Vyr.Host.Csl
     {
         static void Main(string[] args)
         {
-            var configIsolation = new LoadContextIsolation( @"C:\Users\kaept\source\repos\kaep7n\vyr\src\Vyr.Skills.Configuration\bin\Debug\netcoreapp3.0");
+            var configIsolation = new LoadContextIsolation(@"C:\Users\kaept\source\repos\kaep7n\vyr\src\Vyr.Skills.Configuration\bin\Debug\netcoreapp3.0");
             configIsolation.Isolate("Vyr.Skills.Configuration");
-            var defaultConfiguration = configIsolation.Create("Vyr.Skills.Configuration.Default");
-
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            var defaultConfiguration = configIsolation.CreateInstance("Vyr.Skills.Configuration.Default");
 
             Console.WriteLine("creating core");
             var core = new Core();

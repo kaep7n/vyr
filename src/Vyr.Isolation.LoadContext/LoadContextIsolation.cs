@@ -18,10 +18,9 @@ namespace Vyr.Isolation.LoadContext
             this.loadContext = new DirectoryLoadContext(directory);
         }
 
-        public object Create(string typeName)
+        public object CreateInstance(string typeName)
         {
-            var type = this.assembly.GetType(typeName);
-            return Activator.CreateInstance(type);
+            return this.assembly.CreateInstance(typeName, true);
         }
 
         public void Isolate(string assemblyName)
