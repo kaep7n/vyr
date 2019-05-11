@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Vyr.Isolation.LoadContext
+namespace Vyr.Isolation.Context
 {
     public class LoadContextIsolation : IIsolation
     {

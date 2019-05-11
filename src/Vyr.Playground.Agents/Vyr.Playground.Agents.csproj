@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vyr.Isolation\Vyr.Isolation.csproj" />
+    <ProjectReference Include="..\Vyr.Agents\Vyr.Agents.csproj" />
   </ItemGroup>
 
 </Project>

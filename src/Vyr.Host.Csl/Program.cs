@@ -1,5 +1,5 @@
 ﻿using System;
-using Vyr.Isolation.LoadContext;
+using Vyr.Isolation.Context;
 
 namespace Vyr.Host.Csl
 {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace Vyr.Isolation.LoadContext
+namespace Vyr.Isolation.Context
 {
     public class DirectoryLoadContext : AssemblyLoadContext
     {

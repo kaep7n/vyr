@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Vyr.Isolation.LoadContext\Vyr.Isolation.LoadContext.csproj" />
+    <ProjectReference Include="..\Vyr.Isolation.Context\Vyr.Isolation.Context.csproj" />
     <ProjectReference Include="..\Vyr.Skills.Configuration\Vyr.Skills.Configuration.csproj" />
     <ProjectReference Include="..\Vyr\Vyr.csproj" />
   </ItemGroup>
