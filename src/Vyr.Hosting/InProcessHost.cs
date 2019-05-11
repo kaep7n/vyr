@@ -1,52 +1,25 @@
 ﻿using System;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using Vyr.Isolation;
 
 namespace Vyr.Hosting
 {
     public class InProcessHost : IHost
     {
-        private readonly string workingDirectory;
-        private readonly string name;
+        private readonly Core core;
 
-        private WeakReference loadContextReference = null;
-
-        public InProcessHost(string workingDirectory, string name)
+        public InProcessHost(IIsolationStrategy isolationStrategy, string[] assemblies)
         {
-            this.workingDirectory = workingDirectory;
-            this.name = name;
+            this.core = new Core(isolationStrategy, assemblies);
         }
-
-        public bool IsAlive => this.loadContextReference.IsAlive;
-
-        [MethodImpl(MethodImplOptions.NoInlining)]
+        
         public void Up()
         {
-            var inProcessLoadContext = new InProcessLoadContext(this.workingDirectory);
-            this.loadContextReference = new WeakReference(inProcessLoadContext, true);
-
-            var assembly = inProcessLoadContext.LoadFromAssemblyName(new AssemblyName(this.name));
-
-            if (assembly.EntryPoint != null)
-            {
-                var args = new object[1] { new string[] { } };
-                assembly.EntryPoint.Invoke(null, args);
-            }
-            else
-            {
-                var type = assembly.GetTypes().First(t => t.Name == "Process");
-                var instance = Activator.CreateInstance(type);
-
-                type.GetMethod("Run").Invoke(instance, null);
-            }
+            this.core.Start();
         }
 
         public void Down()
         {
-            var inProcessLoadContext = this.loadContextReference.Target as InProcessLoadContext;
-
-            inProcessLoadContext.Unload();
+            this.core.Stop();
         }
     }
 }

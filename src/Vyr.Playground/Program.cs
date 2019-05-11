@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using Vyr.Hosting;
+using Vyr.Isolation.Context;
 
 namespace Vyr.Playground
 {
@@ -9,72 +9,20 @@ namespace Vyr.Playground
     {
         static void Main(string[] args)
         {
-            var workingConsoleDirectory = @"C:\Users\kaept\Source\Repos\kaep7n\vyr\src\Vyr.Tests.Console\bin\Debug\netcoreapp3.0";
-            var workingLibraryDirectory = @"C:\Users\kaept\Source\Repos\kaep7n\vyr\src\Vyr.Tests.Library\bin\Debug\netcoreapp3.0";
+            var isolationStrategy = new ContextIsolationStrategy(Directory.GetCurrentDirectory());
+            var assemblies = new [] { "Vyr.Playground.Agents" };
 
-            var consoleHost = new InProcessHost(workingConsoleDirectory, "Vyr.Tests.Console");
-            var libraryHost = new InProcessHost(workingLibraryDirectory, "Vyr.Tests.Library");
+            Console.WriteLine("creating host");
+            var host = new InProcessHost(isolationStrategy, assemblies);
+            Console.WriteLine("created host");
 
-            string input;
+            Console.WriteLine("starting host");
+            host.Up();
+            Console.WriteLine("started host");
 
-            do
-            {
-                try
-                {
-                    consoleHost.Up();
-                    Console.WriteLine("Console Host is up");
-                    consoleHost.Down();
-                    Console.WriteLine("Console Host is down");
-
-                    libraryHost.Up();
-                    Console.WriteLine("Library Host is up");
-                    libraryHost.Down();
-                    Console.WriteLine("Library Host is down");
-
-                    while (consoleHost.IsAlive)
-                    {
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-
-                        Console.WriteLine("console alive");
-                    }
-
-                    Console.WriteLine("console dead");
-
-                    while (libraryHost.IsAlive)
-                    {
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-
-                        Console.WriteLine("lib alive");
-                    }
-
-                    Console.WriteLine("lib dead");
-
-                    WriteAllAssemblies();
-                }
-                catch (Exception exception)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(exception.Message);
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                }
-                finally
-                {
-                    input = Console.ReadLine();
-                }
-            }
-            while (input != "exit");
-        }
-
-        private static void WriteAllAssemblies()
-        {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            foreach (var assembly in assemblies.OrderBy(a => a.FullName))
-            {
-                Console.WriteLine(assembly.FullName);
-            }
+            Console.WriteLine("stopping host");
+            host.Down();
+            Console.WriteLine("stopping host");
         }
     }
 }
