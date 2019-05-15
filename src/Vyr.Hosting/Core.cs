@@ -28,7 +28,7 @@ namespace Vyr.Hosting
             {
                 var isolation = this.isolationStrategy.Create();
 
-                var agent = (IAgent)isolation.Isolate(agentDescription);
+                var agent = isolation.Isolate(agentDescription);
 
                 this.agents.Add(agent);
             }
