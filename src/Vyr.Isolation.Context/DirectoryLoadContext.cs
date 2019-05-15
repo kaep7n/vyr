@@ -10,7 +10,7 @@ namespace Vyr.Isolation.Context
         private readonly string directory;
 
         public DirectoryLoadContext(string directory)
-            : base(true)
+            : base("DirectoryLoadContext", true)
         {
             if (directory == null)
             {

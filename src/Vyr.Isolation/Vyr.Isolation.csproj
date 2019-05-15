@@ -5,4 +5,8 @@
     <Version>0.0.1</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Vyr.Agents\Vyr.Agents.csproj" />
+  </ItemGroup>
+
 </Project>

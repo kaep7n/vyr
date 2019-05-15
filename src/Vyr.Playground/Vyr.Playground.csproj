@@ -9,7 +9,6 @@
     <ProjectReference Include="..\Vyr.Hosting\Vyr.Hosting.csproj" />
     <ProjectReference Include="..\Vyr.Isolation.Context\Vyr.Isolation.Context.csproj" />
     <ProjectReference Include="..\Vyr.Playground.Agents\Vyr.Playground.Agents.csproj" />
-    <ProjectReference Include="..\Vyr\Vyr.csproj" />
   </ItemGroup>
 
 </Project>
