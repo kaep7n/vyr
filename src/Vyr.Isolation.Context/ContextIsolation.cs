@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Reflection;
-using Vyr.Agents;
 
 namespace Vyr.Isolation.Context
 {
@@ -12,6 +11,14 @@ namespace Vyr.Isolation.Context
         public ContextIsolation(string directory)
         {
             this.directory = directory;
+        }
+
+        public void Free()
+        {
+            if (this.loadContextRef.TryGetTarget(out var loadContext))
+            {
+                loadContext.Unload();
+            }
         }
 
         public object Isolate(AgentDescription agentDescription)

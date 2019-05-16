@@ -35,7 +35,7 @@ namespace Vyr.Playground
             Console.WriteLine("stopping host");
 
             GC.Collect();
-            GC.WaitForFullGCComplete();
+            GC.WaitForPendingFinalizers();
 
             WriteContexts();
         }
@@ -45,6 +45,11 @@ namespace Vyr.Playground
             foreach (var context in AssemblyLoadContext.All)
             {
                 Console.WriteLine("Context: " + context.Name);
+
+                foreach (var assembly in context.Assemblies)
+                {
+                    Console.WriteLine("          Assembly: " + assembly.FullName);
+                }
             }
         }
     }

@@ -10,6 +10,7 @@ namespace Vyr.Hosting
         private readonly IIsolationStrategy isolationStrategy;
         private readonly AgentDescription[] agentDescriptions;
         private readonly List<object> agents = new List<object>();
+        private readonly List<IIsolation> isolations = new List<IIsolation>();
 
         public Core(IIsolationStrategy isolationStrategy, AgentDescription[] agentDescriptions)
         {
@@ -27,8 +28,12 @@ namespace Vyr.Hosting
             foreach (var agentDescription in this.agentDescriptions)
             {
                 var isolation = this.isolationStrategy.Create();
+                this.isolations.Add(isolation);
 
                 var agent = isolation.Isolate(agentDescription);
+
+                var runMethod = agent.GetType().GetMethod("Run");
+                runMethod.Invoke(agent, new object[] { });
 
                 this.agents.Add(agent);
             }
@@ -36,6 +41,11 @@ namespace Vyr.Hosting
 
         public void Stop()
         {
+            foreach (var isolation in this.isolations)
+            {
+                isolation.Free();
+            }
+
             this.agents.Clear();
         }
     }

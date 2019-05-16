@@ -9,6 +9,7 @@ namespace Vyr.Playground.Agents
     {
         public void Run()
         {
+            Console.WriteLine("Hey i'm Skully");
         }
     }
 }
