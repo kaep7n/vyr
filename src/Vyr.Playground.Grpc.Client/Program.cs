@@ -9,7 +9,7 @@ namespace Vyr.Playground.Grpc
 {
     class Program
     {
-        static async Task Main(string[] args)
+        static void Main(string[] args)
         {
             var subs = new List<Subscriber>();
 
@@ -18,7 +18,7 @@ namespace Vyr.Playground.Grpc
                 subs.Add(SubscribeToTopic());
             }
 
-            //subs[0].Publish();
+            subs[0].Publish();
 
             Console.ReadLine();
         }
@@ -47,11 +47,10 @@ namespace Vyr.Playground.Grpc
             {
                 this.subscription = new Subscription() { Id = Guid.NewGuid().ToString() };
 
-                using var call = this.pubSubClient.Subscribe(this.subscription);
+                Task.Run(async () =>
+                {
+                    using var call = this.pubSubClient.Subscribe(this.subscription);
                 
-                //Receive
-                _ = Task.Run(async () =>
-                 {
                      while (true)
                      {
                          Console.WriteLine($"{this.subscription.Id}: waiting for data");

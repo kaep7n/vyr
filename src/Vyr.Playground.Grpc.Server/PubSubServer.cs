@@ -22,13 +22,11 @@ namespace Vyr.Playground.Grpc
         public override async Task Subscribe(Subscription subscription, IServerStreamWriter<Event> responseStream, ServerCallContext context)
         {
             Console.WriteLine($"{subscription.Id}: Subscribing");
-
             this.subscriberWritersMap[subscription.Id] = responseStream;
 
             while (this.subscriberWritersMap.ContainsKey(subscription.Id))
             {
                 Console.WriteLine($"{subscription.Id}: Check events for subscriber");
-
                 var @event = await this.buffer.ReceiveAsync();
                 Console.WriteLine($"{subscription.Id}: Received event for topic {@event.Topic} from buffer ");
 
