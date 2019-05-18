@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Vyr.Agents;
 using Vyr.Isolation;
 
-namespace Vyr
+namespace Vyr.Hosting
 {
     public class Core
     {
-        private readonly string[] assemblies;
         private readonly IIsolationStrategy isolationStrategy;
+        private readonly AgentDescription[] agentDescriptions;
+        private readonly List<object> agents = new List<object>();
         private readonly List<IIsolation> isolations = new List<IIsolation>();
 
-        public Core(IIsolationStrategy isolationStrategy, string[] assemblies)
+        public Core(IIsolationStrategy isolationStrategy, AgentDescription[] agentDescriptions)
         {
             if (isolationStrategy == null)
             {
@@ -18,17 +20,22 @@ namespace Vyr
             }
 
             this.isolationStrategy = isolationStrategy;
-            this.assemblies = assemblies;
+            this.agentDescriptions = agentDescriptions;
         }
 
         public void Start()
         {
-            foreach (var assembly in this.assemblies)
+            foreach (var agentDescription in this.agentDescriptions)
             {
                 var isolation = this.isolationStrategy.Create();
-                isolation.Isolate(assembly);
-
                 this.isolations.Add(isolation);
+
+                var agent = isolation.Isolate(agentDescription);
+
+                var runMethod = agent.GetType().GetMethod("Run");
+                runMethod.Invoke(agent, new object[] { });
+
+                this.agents.Add(agent);
             }
         }
 
@@ -39,7 +46,7 @@ namespace Vyr
                 isolation.Free();
             }
 
-            this.isolations.Clear();
+            this.agents.Clear();
         }
     }
 }

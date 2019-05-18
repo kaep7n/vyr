@@ -7,7 +7,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Vyr.Isolation\Vyr.Isolation.csproj" />
-    <ProjectReference Include="..\Vyr\Vyr.csproj" />
   </ItemGroup>
 
 </Project>

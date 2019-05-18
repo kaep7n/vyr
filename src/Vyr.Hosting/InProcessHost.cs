@@ -7,9 +7,9 @@ namespace Vyr.Hosting
     {
         private readonly Core core;
 
-        public InProcessHost(IIsolationStrategy isolationStrategy, string[] assemblies)
+        public InProcessHost(IIsolationStrategy isolationStrategy, AgentDescription[] agentDescriptions)
         {
-            this.core = new Core(isolationStrategy, assemblies);
+            this.core = new Core(isolationStrategy, agentDescriptions);
         }
         
         public void Up()
