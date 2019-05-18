@@ -6,6 +6,7 @@ package pubsub;
 service PubSub {
   rpc Subscribe(Subscription) returns (stream Event) {}
   rpc Unsubscribe(Subscription) returns (Subscription) {}
+  rpc Publish(Event) returns (Event) {}
 }
 
 message Subscription {

@@ -2,6 +2,7 @@
 using Pubsub;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Vyr.Playground.Grpc
@@ -10,26 +11,26 @@ namespace Vyr.Playground.Grpc
     {
         static async Task Main(string[] args)
         {
-            var tasks = new List<Task>();
+            var subs = new List<Subscriber>();
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 5; i++)
             {
-                tasks.Add(SubscribeToTopic("config"));
+                subs.Add(SubscribeToTopic());
             }
 
-            await Task.WhenAll(tasks);
+            //subs[0].Publish();
+
+            Console.ReadLine();
         }
 
-        private static async Task SubscribeToTopic(string topic)
+        private static Subscriber SubscribeToTopic()
         {
-            Console.WriteLine("Creating channel");
             var channel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
-            Console.WriteLine("Creating client");
             var client = new Subscriber(new PubSub.PubSubClient(channel));
 
-            Console.WriteLine("Subscribing to topic test");
-            await client.Subscribe();
-            Console.WriteLine($"Subscribted to topic");
+            client.Subscribe();
+
+            return client;
         }
 
         public class Subscriber
@@ -42,22 +43,33 @@ namespace Vyr.Playground.Grpc
                 this.pubSubClient = pubSubClient;
             }
 
-            public async Task Subscribe()
+            public void Subscribe()
             {
                 this.subscription = new Subscription() { Id = Guid.NewGuid().ToString() };
-                using (var call = this.pubSubClient.Subscribe(this.subscription))
-                {
-                    //Receive
-                    var responseReaderTask = Task.Run(async () =>
-                    {
-                        while (await call.ResponseStream.MoveNext())
-                        {
-                            Console.WriteLine($"{this.subscription.Id}: Event received: " + call.ResponseStream.Current);
-                        }
-                    });
 
-                    await responseReaderTask;
-                }
+                using var call = this.pubSubClient.Subscribe(this.subscription);
+                
+                //Receive
+                _ = Task.Run(async () =>
+                 {
+                     while (true)
+                     {
+                         Console.WriteLine($"{this.subscription.Id}: waiting for data");
+
+                         if (!await call.ResponseStream.MoveNext())
+                         {
+                             Console.WriteLine($"{this.subscription.Id}: no data available");
+                             continue;
+                         }
+
+                         Console.WriteLine($"{this.subscription.Id}: Event received: " + call.ResponseStream.Current);
+                     }
+                 });
+            }
+
+            public void Publish()
+            {
+                this.pubSubClient.Publish(new Event { Topic = "config", Value = $"Message from {this.subscription.Id}" });
             }
 
             public void Unsubscribe()

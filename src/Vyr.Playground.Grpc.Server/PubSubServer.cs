@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using System.Timers;
@@ -12,46 +12,47 @@ namespace Vyr.Playground.Grpc
 {
     public class PubSubServer : PubSubBase
     {
-        private readonly Timer timer = new Timer();
         private readonly BufferBlock<Event> buffer = new BufferBlock<Event>();
-        private readonly Dictionary<string, IServerStreamWriter<Event>> subscriberWritersMap = new Dictionary<string, IServerStreamWriter<Event>>();
+        private readonly ConcurrentDictionary<string, IServerStreamWriter<Event>> subscriberWritersMap = new ConcurrentDictionary<string, IServerStreamWriter<Event>>();
 
         public PubSubServer()
         {
-            this.timer.Interval = 1000;
-            this.timer.Elapsed += this.Timer_Elapsed;
-            this.timer.Start();
         }
 
         public override async Task Subscribe(Subscription subscription, IServerStreamWriter<Event> responseStream, ServerCallContext context)
         {
+            Console.WriteLine($"{subscription.Id}: Subscribing");
+
             this.subscriberWritersMap[subscription.Id] = responseStream;
 
             while (this.subscriberWritersMap.ContainsKey(subscription.Id))
             {
+                Console.WriteLine($"{subscription.Id}: Check events for subscriber");
+
                 var @event = await this.buffer.ReceiveAsync();
-                var tasks = new List<Task>();
+                Console.WriteLine($"{subscription.Id}: Received event for topic {@event.Topic} from buffer ");
 
                 foreach (var serverStreamWriter in this.subscriberWritersMap.Values)
                 {
-                    tasks.Add(serverStreamWriter.WriteAsync(@event));
+                    Console.WriteLine($"{subscription.Id}: Write event to stream");
+                    await serverStreamWriter.WriteAsync(@event);
+                    Console.WriteLine($"{subscription.Id}: Wrote event to stream");
                 }
-
-                await Task.WhenAll(tasks);
             }
+        }
+
+        public override async Task<Event> Publish(Event request, ServerCallContext context)
+        {
+            await this.buffer.SendAsync(request);
+
+            return request;
         }
 
         public override Task<Subscription> Unsubscribe(Subscription request, ServerCallContext context)
         {
-            this.subscriberWritersMap.Remove(request.Id);
+            this.subscriberWritersMap.TryRemove(request.Id, out _);
 
             return Task.FromResult(request);
-        }
-
-
-        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            this.buffer.SendAsync(new Event { Topic = "config", Value = "config has changed" });
         }
     }
 }
