@@ -30,11 +30,14 @@ namespace Vyr.Playground.Grpc
             while (this.subscriberWritersMap.ContainsKey(subscription.Id))
             {
                 var @event = await this.buffer.ReceiveAsync();
+                var tasks = new List<Task>();
 
                 foreach (var serverStreamWriter in this.subscriberWritersMap.Values)
                 {
-                    await serverStreamWriter.WriteAsync(@event);
+                    tasks.Add(serverStreamWriter.WriteAsync(@event));
                 }
+
+                await Task.WhenAll(tasks);
             }
         }
 
