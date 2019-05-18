@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package pubsub;
+
+// Interface exported by the server.
+service PubSub {
+  rpc Subscribe(Subscription) returns (stream Event) {}
+  rpc Unsubscribe(Subscription) returns (Subscription) {}
+}
+
+message Subscription {
+	string id = 1;
+	string topic = 2;
+}
+
+message Event {
+	string topic = 1;
+	string value = 2;
+}
