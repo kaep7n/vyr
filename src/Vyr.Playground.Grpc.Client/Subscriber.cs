@@ -1,7 +1,7 @@
-﻿using Pubsub;
+﻿using Google.Protobuf.WellKnownTypes;
+using PublishAndSubcribe;
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using static PublishAndSubcribe.PubSub;
 
 namespace Vyr.Playground.Grpc
 {
@@ -9,40 +9,34 @@ namespace Vyr.Playground.Grpc
     {
         public class Subscriber
         {
-            private readonly PubSub.PubSubClient pubSubClient;
+            private readonly PubSubClient pubSubClient;
             private Subscription subscription;
 
-            public Subscriber(PubSub.PubSubClient pubSubClient)
+            public Subscriber(PubSubClient pubSubClient)
             {
                 this.pubSubClient = pubSubClient;
             }
 
             public void Subscribe()
             {
-                this.subscription = new Subscription() { Id = Guid.NewGuid().ToString() };
-
-                Task.Run(async () =>
+                this.subscription = new Subscription
                 {
-                    using var call = this.pubSubClient.Subscribe(this.subscription);
-                
-                     while (true)
-                     {
-                         Console.WriteLine($"{this.subscription.Id}: waiting for data");
+                    ClientId = Guid.NewGuid().ToString()
+                };
 
-                         if (!await call.ResponseStream.MoveNext())
-                         {
-                             Console.WriteLine($"{this.subscription.Id}: no data available");
-                             continue;
-                         }
+                this.subscription.Topics.Add("config/changed");
+                this.subscription.Topics.Add("config/reset");
 
-                         Console.WriteLine($"{this.subscription.Id}: Event received: " + call.ResponseStream.Current);
-                     }
-                 });
+                this.pubSubClient.Subscribe(this.subscription);
             }
 
             public void Publish()
             {
-                this.pubSubClient.Publish(new Event { Topic = "config", Value = $"Message from {this.subscription.Id}" });
+                var configChanged = new ConfigChanged();
+                configChanged.Id = Guid.NewGuid().ToString();
+                configChanged.Type = "change";
+
+                this.pubSubClient.Publish(new Event { Topic = "config", Content = Any.Pack(configChanged) });
             }
 
             public void Unsubscribe()

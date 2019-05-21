@@ -1,8 +1,7 @@
 ﻿using Grpc.Core;
-using Pubsub;
 using System;
 using System.Collections.Generic;
-using System.Threading;
+using static PublishAndSubcribe.PubSub;
 
 namespace Vyr.Playground.Grpc
 {
@@ -25,7 +24,7 @@ namespace Vyr.Playground.Grpc
         private static Subscriber SubscribeToTopic()
         {
             var channel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
-            var client = new Subscriber(new PubSub.PubSubClient(channel));
+            var client = new Subscriber(new PubSubClient(channel));
 
             client.Subscribe();
 

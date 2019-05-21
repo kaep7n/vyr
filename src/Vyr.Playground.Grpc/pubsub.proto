@@ -1,20 +1,32 @@
 syntax = "proto3";
 
-package pubsub;
+import "google/protobuf/any.proto";
 
-// Interface exported by the server.
+package publishAndSubcribe;
+
 service PubSub {
-  rpc Subscribe(Subscription) returns (stream Event) {}
+
+  rpc Subscribe(Subscription) returns (Subscription) {}
+
+  rpc Attach(Subscription) returns (stream Event) {}
+
   rpc Unsubscribe(Subscription) returns (Subscription) {}
+
   rpc Publish(Event) returns (Event) {}
 }
 
 message Subscription {
-	string id = 1;
-	string topic = 2;
+	string clientId = 1;
+	repeated string topics = 2;
 }
 
 message Event {
 	string topic = 1;
-	string value = 2;
+	string contentType = 2;
+    google.protobuf.Any content = 4;
+}
+
+message ConfigChanged {
+	string id = 1;
+	string type = 2;
 }

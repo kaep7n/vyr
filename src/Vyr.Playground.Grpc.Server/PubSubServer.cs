@@ -3,52 +3,45 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using System.Timers;
 using Grpc.Core;
-using Pubsub;
-using static Pubsub.PubSub;
+using PublishAndSubcribe;
+using static PublishAndSubcribe.PubSub;
 
 namespace Vyr.Playground.Grpc
 {
     public class PubSubServer : PubSubBase
     {
         private readonly BufferBlock<Event> buffer = new BufferBlock<Event>();
-        private readonly ConcurrentDictionary<string, IServerStreamWriter<Event>> subscriberWritersMap = new ConcurrentDictionary<string, IServerStreamWriter<Event>>();
+
+        private readonly List<Subscription> subscriptions = new List<Subscription>();
 
         public PubSubServer()
         {
         }
 
-        public override async Task Subscribe(Subscription subscription, IServerStreamWriter<Event> responseStream, ServerCallContext context)
+
+        public override Task<Subscription> Subscribe(Subscription request, ServerCallContext context)
         {
-            Console.WriteLine($"{subscription.Id}: Subscribing");
-            this.subscriberWritersMap[subscription.Id] = responseStream;
+            Console.WriteLine($"{request.ClientId}: Subscribing");
 
-            while (this.subscriberWritersMap.ContainsKey(subscription.Id))
-            {
-                Console.WriteLine($"{subscription.Id}: Check events for subscriber");
-                var @event = await this.buffer.ReceiveAsync();
-                Console.WriteLine($"{subscription.Id}: Received event for topic {@event.Topic} from buffer ");
+            this.subscriptions.Add(request);
 
-                foreach (var serverStreamWriter in this.subscriberWritersMap.Values)
-                {
-                    Console.WriteLine($"{subscription.Id}: Write event to stream");
-                    await serverStreamWriter.WriteAsync(@event);
-                    Console.WriteLine($"{subscription.Id}: Wrote event to stream");
-                }
-            }
+            return Task.FromResult(request);
         }
 
-        public override async Task<Event> Publish(Event request, ServerCallContext context)
+        public override Task Attach(Subscription request, IServerStreamWriter<Event> responseStream, ServerCallContext context)
         {
-            await this.buffer.SendAsync(request);
-
-            return request;
+            return base.Attach(request, responseStream, context);
         }
 
         public override Task<Subscription> Unsubscribe(Subscription request, ServerCallContext context)
         {
-            this.subscriberWritersMap.TryRemove(request.Id, out _);
+            return base.Unsubscribe(request, context);
+        }
+
+        public override Task<Event> Publish(Event request, ServerCallContext context)
+        {
+            var configChanged = request.Content.Unpack<ConfigChanged>();
 
             return Task.FromResult(request);
         }

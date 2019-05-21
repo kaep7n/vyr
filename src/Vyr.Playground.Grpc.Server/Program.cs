@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using PublishAndSubcribe;
 using System;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace Vyr.Playground.Grpc
         {
             var server = new Server
             {
-                Services = { Pubsub.PubSub.BindService(new PubSubServer()) },
+                Services = { PubSub.BindService(new PubSubServer()) },
                 Ports = { new ServerPort("localhost", Port, ServerCredentials.Insecure) }
             };
             server.Start();
