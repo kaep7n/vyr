@@ -1,6 +1,7 @@
 ﻿using Grpc.Core;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static PublishAndSubcribe.PubSub;
 
 namespace Vyr.Playground.Grpc
@@ -9,26 +10,19 @@ namespace Vyr.Playground.Grpc
     {
         static void Main(string[] args)
         {
-            var subs = new List<Subscriber>();
+            Task.Run(async () =>
+              {
+                  var receivingChannel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
+                  var receivingClient = new Subscriber(new PubSubClient(receivingChannel));
+                  receivingClient.Subscribe("configuration/changed");
+                  await receivingClient.AttachAsync();
+              });
 
-            for (int i = 0; i < 5; i++)
-            {
-                subs.Add(SubscribeToTopic());
-            }
-
-            subs[0].Publish();
+            var sendingChannel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
+            var sendingClient = new Subscriber(new PubSubClient(sendingChannel));
+            sendingClient.Publish("configuration/changed");
 
             Console.ReadLine();
-        }
-
-        private static Subscriber SubscribeToTopic()
-        {
-            var channel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
-            var client = new Subscriber(new PubSubClient(channel));
-
-            client.Subscribe();
-
-            return client;
         }
     }
 }

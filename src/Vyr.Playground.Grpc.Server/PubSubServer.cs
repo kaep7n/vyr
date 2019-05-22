@@ -13,25 +13,32 @@ namespace Vyr.Playground.Grpc
     {
         private readonly BufferBlock<Event> buffer = new BufferBlock<Event>();
 
-        private readonly List<Subscription> subscriptions = new List<Subscription>();
+        private readonly ConcurrentDictionary<string,Subscription> subscriptions = new ConcurrentDictionary<string, Subscription>();
 
         public PubSubServer()
         {
         }
 
-
         public override Task<Subscription> Subscribe(Subscription request, ServerCallContext context)
         {
             Console.WriteLine($"{request.ClientId}: Subscribing");
 
-            this.subscriptions.Add(request);
+            this.subscriptions.TryAdd(request.ClientId, request);
 
             return Task.FromResult(request);
         }
 
-        public override Task Attach(Subscription request, IServerStreamWriter<Event> responseStream, ServerCallContext context)
+        public override async Task Attach(Subscription request, IServerStreamWriter<Event> responseStream, ServerCallContext context)
         {
-            return base.Attach(request, responseStream, context);
+            while (this.subscriptions.TryGetValue(request.ClientId, out var subscription))
+            {
+                var @event = await this.buffer.ReceiveAsync();
+
+                if (subscription.Topics.Contains(@event.Topic))
+                {
+                    await responseStream.WriteAsync(@event);
+                }
+            }
         }
 
         public override Task<Subscription> Unsubscribe(Subscription request, ServerCallContext context)
@@ -39,11 +46,11 @@ namespace Vyr.Playground.Grpc
             return base.Unsubscribe(request, context);
         }
 
-        public override Task<Event> Publish(Event request, ServerCallContext context)
+        public async override Task<Event> Publish(Event request, ServerCallContext context)
         {
-            var configChanged = request.Content.Unpack<ConfigChanged>();
+            await this.buffer.SendAsync(request);
 
-            return Task.FromResult(request);
+            return request;
         }
     }
 }
