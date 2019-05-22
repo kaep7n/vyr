@@ -9,20 +9,40 @@ namespace Vyr.Playground.Grpc
 {
     partial class Program
     {
-        private const int messageCount = 4000;
-        private const int concurrentSendProcesses = 4;
+        private const int messageCount = 80000;
+        private const int concurrentSendProcesses = 8;
 
         static async Task Main(string[] args)
         {
-            _ = Task.Run(async () =>
+            var receivingChannel = new Channel("127.0.0.1:60000", ChannelCredentials.Insecure);
+            var receivingClient = new Subscriber(new PubSubClient(receivingChannel));
+
+            var swReceive = new Stopwatch();
+            var receivedMessageCount = 0;
+
+            receivingClient.MessageReceived += (o, e) =>
+            {
+                if (!swReceive.IsRunning)
                 {
-                    var receivingChannel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
-                    var receivingClient = new Subscriber(new PubSubClient(receivingChannel));
-                    receivingClient.Subscribe("configuration/changed");
-                    await receivingClient.AttachAsync();
+                    swReceive.Start();
+                }
+
+                receivedMessageCount++;
+
+                if (receivedMessageCount == messageCount)
+                {
+                    Console.WriteLine($"Receiving {messageCount} took {swReceive.Elapsed}");
+                }
+            };
+
+            receivingClient.Subscribe("configuration/changed");
+
+            _ = Task.Run(() =>
+                {
+                    _ = receivingClient.AttachAsync();
                 });
 
-            var sendingChannel = new Channel("127.0.0.1:50052", ChannelCredentials.Insecure);
+            var sendingChannel = new Channel("127.0.0.1:60000", ChannelCredentials.Insecure);
             var sendingClient = new Subscriber(new PubSubClient(sendingChannel));
 
             var sw = Stopwatch.StartNew();
@@ -50,7 +70,6 @@ namespace Vyr.Playground.Grpc
             sw.Stop();
 
             Console.WriteLine($"Sending {messageCount} messages took {sw.Elapsed}");
-
             Console.ReadLine();
         }
     }

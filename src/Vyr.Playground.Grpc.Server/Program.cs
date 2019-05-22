@@ -7,7 +7,7 @@ namespace Vyr.Playground.Grpc
 {
     class Program
     {
-        private const int Port = 50052;
+        private const int Port = 60000;
 
         static async Task Main(string[] args)
         {

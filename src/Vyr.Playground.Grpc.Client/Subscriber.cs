@@ -20,6 +20,13 @@ namespace Vyr.Playground.Grpc
                 this.pubSubClient = pubSubClient;
             }
 
+            public event EventHandler<EventArgs> MessageReceived;
+
+            private void OnMessageReceived()
+            {
+                this.MessageReceived?.Invoke(this, new EventArgs());
+            }
+
             public void Subscribe(params string[] topics)
             {
                 this.subscription = new Subscription
@@ -52,17 +59,11 @@ namespace Vyr.Playground.Grpc
 
                 Console.WriteLine("Receiving Messages");
 
-                var sw = Stopwatch.StartNew();
-                int messageCount = 0;
                 while(await responseStream.MoveNext())
                 {
                     var @event = responseStream.Current;
-                    messageCount++;
-                    //Console.WriteLine(@event.Content);
+                    this.OnMessageReceived();
                 }
-
-                sw.Stop();
-                Console.WriteLine($"Receiving {messageCount} took {sw.Elapsed}");
             }
 
             public void Unsubscribe()
