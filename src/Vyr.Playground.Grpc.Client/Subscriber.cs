@@ -2,6 +2,7 @@
 using PublishAndSubcribe;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using static PublishAndSubcribe.PubSub;
 
@@ -49,11 +50,19 @@ namespace Vyr.Playground.Grpc
 
                 var responseStream = call.ResponseStream;
 
+                Console.WriteLine("Receiving Messages");
+
+                var sw = Stopwatch.StartNew();
+                int messageCount = 0;
                 while(await responseStream.MoveNext())
                 {
                     var @event = responseStream.Current;
-                    Console.WriteLine(@event.Content);
+                    messageCount++;
+                    //Console.WriteLine(@event.Content);
                 }
+
+                sw.Stop();
+                Console.WriteLine($"Receiving {messageCount} took {sw.Elapsed}");
             }
 
             public void Unsubscribe()
