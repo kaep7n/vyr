@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homematic.Api.Xml", "Homema
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homematic.Api.Xml.Tests", "Homematic.Api.Xml.Tests\Homematic.Api.Xml.Tests.csproj", "{6D23B75B-EF46-4B42-A812-5C53A09D720A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Skills.Tests", "Vyr.Skills.Tests\Vyr.Skills.Tests.csproj", "{48F05ABB-64F3-41CD-BC98-A7ABE1B3457E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{6D23B75B-EF46-4B42-A812-5C53A09D720A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D23B75B-EF46-4B42-A812-5C53A09D720A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D23B75B-EF46-4B42-A812-5C53A09D720A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F05ABB-64F3-41CD-BC98-A7ABE1B3457E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F05ABB-64F3-41CD-BC98-A7ABE1B3457E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F05ABB-64F3-41CD-BC98-A7ABE1B3457E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F05ABB-64F3-41CD-BC98-A7ABE1B3457E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{F41C34B7-6369-4454-B27D-82D1C4CD5BC8} = {E0CDBD51-6358-4829-8B98-8938500E2421}
 		{98ACCD40-83B9-494B-9B6E-AAFE1FB1CB6A} = {8265A5DC-BBF7-46D4-8918-8B7F53A37D9E}
 		{6D23B75B-EF46-4B42-A812-5C53A09D720A} = {8265A5DC-BBF7-46D4-8918-8B7F53A37D9E}
+		{48F05ABB-64F3-41CD-BC98-A7ABE1B3457E} = {707FAE37-3F9F-4F79-9B92-16C68C3B01B7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2832708-A738-47A9-84CE-99135374F414}
