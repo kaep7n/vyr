@@ -21,11 +21,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Playground.Agents", "Vy
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Isolation.Context", "Vyr.Isolation.Context\Vyr.Isolation.Context.csproj", "{9253DA74-6AB9-4C1B-8E4B-47426C93065C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Playground.Grpc", "Vyr.Playground.Grpc\Vyr.Playground.Grpc.csproj", "{A3A46BD6-1327-49D1-8A5F-C466AA977A79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Playground.Grpc", "Vyr.Playground.Grpc\Vyr.Playground.Grpc.csproj", "{A3A46BD6-1327-49D1-8A5F-C466AA977A79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Playground.Grpc.Server", "Vyr.Playground.Grpc.Server\Vyr.Playground.Grpc.Server.csproj", "{BC8E5756-3128-481C-A01E-C6991309E6FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Playground.Grpc.Server", "Vyr.Playground.Grpc.Server\Vyr.Playground.Grpc.Server.csproj", "{BC8E5756-3128-481C-A01E-C6991309E6FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Playground.Grpc.Client", "Vyr.Playground.Grpc.Client\Vyr.Playground.Grpc.Client.csproj", "{F41C34B7-6369-4454-B27D-82D1C4CD5BC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.Playground.Grpc.Client", "Vyr.Playground.Grpc.Client\Vyr.Playground.Grpc.Client.csproj", "{F41C34B7-6369-4454-B27D-82D1C4CD5BC8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Homematic", "Homematic", "{8265A5DC-BBF7-46D4-8918-8B7F53A37D9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homematic.Api.Xml", "Homematic.Api.Xml\Homematic.Api.Xml.csproj", "{98ACCD40-83B9-494B-9B6E-AAFE1FB1CB6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Homematic.Api.Xml.Tests", "Homematic.Api.Xml.Tests\Homematic.Api.Xml.Tests.csproj", "{6D23B75B-EF46-4B42-A812-5C53A09D720A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +79,14 @@ Global
 		{F41C34B7-6369-4454-B27D-82D1C4CD5BC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F41C34B7-6369-4454-B27D-82D1C4CD5BC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F41C34B7-6369-4454-B27D-82D1C4CD5BC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98ACCD40-83B9-494B-9B6E-AAFE1FB1CB6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98ACCD40-83B9-494B-9B6E-AAFE1FB1CB6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98ACCD40-83B9-494B-9B6E-AAFE1FB1CB6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98ACCD40-83B9-494B-9B6E-AAFE1FB1CB6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D23B75B-EF46-4B42-A812-5C53A09D720A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D23B75B-EF46-4B42-A812-5C53A09D720A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D23B75B-EF46-4B42-A812-5C53A09D720A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D23B75B-EF46-4B42-A812-5C53A09D720A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -88,6 +102,8 @@ Global
 		{A3A46BD6-1327-49D1-8A5F-C466AA977A79} = {E0CDBD51-6358-4829-8B98-8938500E2421}
 		{BC8E5756-3128-481C-A01E-C6991309E6FB} = {E0CDBD51-6358-4829-8B98-8938500E2421}
 		{F41C34B7-6369-4454-B27D-82D1C4CD5BC8} = {E0CDBD51-6358-4829-8B98-8938500E2421}
+		{98ACCD40-83B9-494B-9B6E-AAFE1FB1CB6A} = {8265A5DC-BBF7-46D4-8918-8B7F53A37D9E}
+		{6D23B75B-EF46-4B42-A812-5C53A09D720A} = {8265A5DC-BBF7-46D4-8918-8B7F53A37D9E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2832708-A738-47A9-84CE-99135374F414}
