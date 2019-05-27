@@ -11,6 +11,8 @@ namespace Vyr.Skills
 
         Task EnqueueAsync(Job job);
 
+        void Subscribe(Action<object> target);
+
         void Disable();
     }
 }

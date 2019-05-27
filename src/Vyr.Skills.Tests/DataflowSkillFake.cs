@@ -24,6 +24,8 @@ namespace Vyr.Skills.Tests
             {
                 this.processedJobs.Add(job);
 
+                this.Publish(new JobResult(job));
+
                 return base.ProcessAsync(job);
             }
         }

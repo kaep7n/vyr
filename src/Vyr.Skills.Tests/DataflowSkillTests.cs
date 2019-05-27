@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Xunit;
 
 namespace Vyr.Skills.Tests
@@ -33,7 +34,7 @@ namespace Vyr.Skills.Tests
         {
             var dataflowSkill = new DataflowSkillFake();
             dataflowSkill.Enable();
-            await dataflowSkill.EnqueueAsync(new Job("1"));
+            await dataflowSkill.EnqueueAsync(new IncomingJob("1"));
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -45,13 +46,13 @@ namespace Vyr.Skills.Tests
         public async Task Enqueue_to_not_enabled_skill_should_not_process_job()
         {
             var dataflowSkill = new DataflowSkillFake();
-            await dataflowSkill.EnqueueAsync(new Job("1"));
+            await dataflowSkill.EnqueueAsync(new IncomingJob("1"));
 
             Assert.False(dataflowSkill.HasProcessedAnyJob());
         }
 
         [Fact]
-        public async Task Enqueue_to_not_enabled_skill_should_not_process_job_until_skill_is_enabled()
+        public async Task Enqueue_to_disabled_skill_should_not_process_job()
         {
             var dataflowSkill = new DataflowSkillFake();
 
@@ -63,7 +64,7 @@ namespace Vyr.Skills.Tests
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.True(dataflowSkill.HasProcessedAnyJob());
+            Assert.False(dataflowSkill.HasProcessedAnyJob());
         }
 
         [Fact]
@@ -71,7 +72,7 @@ namespace Vyr.Skills.Tests
         {
             var dataflowSkill = new DataflowSkillFake();
             dataflowSkill.Enable();
-            await dataflowSkill.EnqueueAsync(new Job("1"));
+            await dataflowSkill.EnqueueAsync(new IncomingJob("1"));
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -79,12 +80,73 @@ namespace Vyr.Skills.Tests
             Assert.Equal(1, dataflowSkill.ProcessedJobsCount());
 
             dataflowSkill.Disable();
-            await dataflowSkill.EnqueueAsync(new Job("1"));
+            await dataflowSkill.EnqueueAsync(new IncomingJob("1"));
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
             Assert.Equal(1, dataflowSkill.ProcessedJobsCount());
+        }
+
+        [Fact]
+        public async Task Enqueue_should_process_job_only_once_when_enabled_was_called_multiple_times()
+        {
+            var dataflowSkill = new DataflowSkillFake();
+            dataflowSkill.Enable();
+            dataflowSkill.Enable();
+            await dataflowSkill.EnqueueAsync(new IncomingJob("1"));
+
+            // wait for processing (there should be a prettier and reliable solution)
+            Thread.Sleep(10);
+
+            Assert.Equal(1, dataflowSkill.ProcessedJobsCount());
+        }
+
+        [Fact]
+        public async Task Subscribe_should_send_result_to_target_action()
+        {
+            var incomingJob = new IncomingJob("1");
+
+            var dataflowSkill = new DataflowSkillFake();
+            dataflowSkill.Enable();
+            dataflowSkill.Subscribe(r =>
+            {
+                var result = (JobResult)r;
+
+                Assert.Equal(incomingJob, result.IncomingJob);
+            });
+            
+            await dataflowSkill.EnqueueAsync(incomingJob);
+            // wait for processing (there should be a prettier and reliable solution)
+            Thread.Sleep(10);
+        }
+
+        [Fact]
+        public async Task Subscribe_should_send_result_to_multiple_target_actions()
+        {
+            var resultCount = 0;
+            var incomingJob = new IncomingJob("1");
+
+            var dataflowSkill = new DataflowSkillFake();
+            dataflowSkill.Enable();
+            dataflowSkill.Subscribe(r =>
+            {
+                var result = (JobResult)r;
+                Assert.Equal(incomingJob, result.IncomingJob);
+                resultCount++;
+            });
+            dataflowSkill.Subscribe(r =>
+            {
+                var result = (JobResult)r;
+                Assert.Equal(incomingJob, result.IncomingJob);
+                resultCount++;
+            });
+
+            await dataflowSkill.EnqueueAsync(incomingJob);
+            // wait for processing (there should be a prettier and reliable solution)
+            Thread.Sleep(10);
+
+            Assert.Equal(2, resultCount);
         }
     }
 }
