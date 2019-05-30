@@ -1,7 +1,4 @@
-﻿
-using System;
-
-namespace Vyr.Isolation
+﻿namespace Vyr.Isolation
 {
     public interface IIsolation
     {

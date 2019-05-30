@@ -1,5 +1,4 @@
-﻿using System;
-using Vyr.Isolation;
+﻿using Vyr.Isolation;
 
 namespace Vyr.Hosting
 {
@@ -11,7 +10,7 @@ namespace Vyr.Hosting
         {
             this.core = new Core(isolationStrategy, agentDescriptions);
         }
-        
+
         public void Up()
         {
             this.core.Start();

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using Grpc.Core;
+using PublishAndSubcribe;
+using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
-using Grpc.Core;
-using PublishAndSubcribe;
 using static PublishAndSubcribe.PubSub;
 
 namespace Vyr.Playground.Grpc
@@ -13,7 +12,7 @@ namespace Vyr.Playground.Grpc
     {
         private readonly BufferBlock<Event> buffer = new BufferBlock<Event>();
 
-        private readonly ConcurrentDictionary<string,Subscription> subscriptions = new ConcurrentDictionary<string, Subscription>();
+        private readonly ConcurrentDictionary<string, Subscription> subscriptions = new ConcurrentDictionary<string, Subscription>();
 
         public PubSubServer()
         {

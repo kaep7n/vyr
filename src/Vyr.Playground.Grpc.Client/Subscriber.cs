@@ -2,7 +2,6 @@
 using PublishAndSubcribe;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using static PublishAndSubcribe.PubSub;
 
@@ -59,7 +58,7 @@ namespace Vyr.Playground.Grpc
 
                 Console.WriteLine("Receiving Messages");
 
-                while(await responseStream.MoveNext())
+                while (await responseStream.MoveNext())
                 {
                     var @event = responseStream.Current;
                     this.OnMessageReceived();

@@ -54,13 +54,13 @@ namespace Vyr.Playground.Grpc
 
             for (int i = 0; i < concurrentSendProcesses; i++)
             {
-               var task = Task.Run(() =>
-                {
-                    for (var i = 0; i < messagesPerProcessCount; i++)
-                    {
-                        sendingClient.Publish("configuration/changed");
-                    }
-                });
+                var task = Task.Run(() =>
+                 {
+                     for (var i = 0; i < messagesPerProcessCount; i++)
+                     {
+                         sendingClient.Publish("configuration/changed");
+                     }
+                 });
 
                 tasks.Add(task);
             }

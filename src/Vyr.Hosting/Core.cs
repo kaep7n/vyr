@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Vyr.Agents;
 using Vyr.Isolation;
 
 namespace Vyr.Hosting
