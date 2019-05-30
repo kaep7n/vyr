@@ -9,9 +9,9 @@ namespace Vyr.Skills
 
         void Enable();
 
-        Task EnqueueAsync(Job job);
+        Task EnqueueAsync(IRequest request);
 
-        void Subscribe(Action<object> target);
+        void Subscribe(Action<IResponse> target);
 
         void Disable();
     }

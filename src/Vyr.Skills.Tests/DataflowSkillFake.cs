@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,25 +9,30 @@ namespace Vyr.Skills.Tests
     {
         public class DataflowSkillFake : DataflowSkill
         {
-            private readonly List<Job> processedJobs = new List<Job>();
+            private readonly List<IRequest> processedRequests = new List<IRequest>();
 
-            public bool HasProcessedAnyJob()
+            public bool HasProcessedAnyRequests()
             {
-                return this.processedJobs.Any();
+                return this.processedRequests.Any();
             }
 
-            public int ProcessedJobsCount()
+            public int GetProcessedRequestsCount()
             {
-                return this.processedJobs.Count;
+                return this.processedRequests.Count;
             }
 
-            protected override Task ProcessAsync(Job job)
+            protected override Task ProcessAsync(IRequest request)
             {
-                this.processedJobs.Add(job);
+                if (request is null)
+                {
+                    throw new ArgumentNullException(nameof(request));
+                }
 
-                this.Publish(new JobResult(job));
+                this.processedRequests.Add(request);
 
-                return base.ProcessAsync(job);
+                this.Publish(new Response(request));
+
+                return base.ProcessAsync(request);
             }
         }
     }
