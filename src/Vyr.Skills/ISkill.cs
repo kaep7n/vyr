@@ -5,6 +5,8 @@ namespace Vyr.Skills
 {
     public interface ISkill
     {
+        string Topic { get; }
+
         bool IsEnabled { get; }
 
         void Enable();

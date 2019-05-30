@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vyr.Agents.Tests.Fakes\Vyr.Agents.Tests.Fakes.csproj" />
     <ProjectReference Include="..\Vyr.Agents\Vyr.Agents.csproj" />
     <ProjectReference Include="..\Vyr.Skills.Tests.Fakes\Vyr.Skills.Tests.Fakes.csproj" />
   </ItemGroup>

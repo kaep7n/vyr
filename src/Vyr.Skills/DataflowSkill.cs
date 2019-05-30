@@ -18,6 +18,8 @@ namespace Vyr.Skills
 
         public bool IsEnabled { get; private set; }
 
+        public string Topic { get; private set; }
+
         public void Enable()
         {
             this.incomingBlock.LinkTo(this.incomingTargetBlock, new DataflowLinkOptions { PropagateCompletion = true });
