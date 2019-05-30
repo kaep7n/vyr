@@ -7,7 +7,7 @@ namespace Homematic.Api.Xml.Tests
 {
     public class GetDeviceStateQueryTests
     {
-        [Fact]
+        [DebugOnlyFact]
         public async Task ExecuteAsync()
         {
             var httpClient = new HttpClient();

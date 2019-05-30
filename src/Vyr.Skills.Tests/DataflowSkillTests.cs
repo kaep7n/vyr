@@ -10,98 +10,98 @@ namespace Vyr.Skills.Tests
         [Fact]
         public void Enable_should_set_IsEnabled_to_true()
         {
-            var dataflowSkill = new DataflowSkill();
+            var skill = new DataflowSkill();
 
-            dataflowSkill.Enable();
-            Assert.True(dataflowSkill.IsEnabled);
+            skill.Enable();
+            Assert.True(skill.IsEnabled);
         }
 
         [Fact]
         public async Task EnqueueAsync_should_throw_ArgumentNullException()
         {
-            var dataflowSkill = new DataflowSkill();
+            var skill = new DataflowSkill();
 
-            await Assert.ThrowsAsync<ArgumentNullException>(() => dataflowSkill.EnqueueAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => skill.EnqueueAsync(null));
         }
 
         [Fact]
         public async Task EnqueueAsync_to_enabled_skill_should_process_request()
         {
-            var dataflowSkill = new DataflowSkillFake();
-            dataflowSkill.Enable();
-            await dataflowSkill.EnqueueAsync(new Request());
+            var skill = new DataflowSkillFake();
+            skill.Enable();
+            await skill.EnqueueAsync(new Request());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.True(dataflowSkill.HasProcessedAnyRequests());
+            Assert.True(skill.HasProcessedAnyRequests());
         }
 
         [Fact]
         public async Task EnqueueAsync_to_not_enabled_skill_should_not_process_request()
         {
-            var dataflowSkill = new DataflowSkillFake();
-            await dataflowSkill.EnqueueAsync(new Request());
+            var skill = new DataflowSkillFake();
+            await skill.EnqueueAsync(new Request());
 
-            Assert.False(dataflowSkill.HasProcessedAnyRequests());
+            Assert.False(skill.HasProcessedAnyRequests());
         }
 
         [Fact]
         public async Task EnqueueAsync_to_disabled_skill_should_not_process_request()
         {
-            var dataflowSkill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake();
 
-            await dataflowSkill.EnqueueAsync(new Request());
-            Assert.False(dataflowSkill.HasProcessedAnyRequests());
+            await skill.EnqueueAsync(new Request());
+            Assert.False(skill.HasProcessedAnyRequests());
 
-            dataflowSkill.Enable();
+            skill.Enable();
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.False(dataflowSkill.HasProcessedAnyRequests());
+            Assert.False(skill.HasProcessedAnyRequests());
         }
 
         [Fact]
         public async Task EnqueueAsync_should_process_request_when_enabled_but_not_after_disable()
         {
-            var dataflowSkill = new DataflowSkillFake();
-            dataflowSkill.Enable();
-            await dataflowSkill.EnqueueAsync(new Request());
+            var skill = new DataflowSkillFake();
+            skill.Enable();
+            await skill.EnqueueAsync(new Request());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.Equal(1, dataflowSkill.GetProcessedRequestsCount());
+            Assert.Equal(1, skill.GetProcessedRequestsCount());
 
-            dataflowSkill.Disable();
-            await dataflowSkill.EnqueueAsync(new Request());
+            skill.Disable();
+            await skill.EnqueueAsync(new Request());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.Equal(1, dataflowSkill.GetProcessedRequestsCount());
+            Assert.Equal(1, skill.GetProcessedRequestsCount());
         }
 
         [Fact]
         public async Task EnqueueAsync_should_process_request_only_once_when_enabled_was_called_multiple_times()
         {
-            var dataflowSkill = new DataflowSkillFake();
-            dataflowSkill.Enable();
-            dataflowSkill.Enable();
-            await dataflowSkill.EnqueueAsync(new Request());
+            var skill = new DataflowSkillFake();
+            skill.Enable();
+            skill.Enable();
+            await skill.EnqueueAsync(new Request());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.Equal(1, dataflowSkill.GetProcessedRequestsCount());
+            Assert.Equal(1, skill.GetProcessedRequestsCount());
         }
 
         [Fact]
         public void Subscribe_should_throw_ArgumentNullException()
         {
-            var dataflowSkill = new DataflowSkillFake();
-            Assert.Throws<ArgumentNullException>(() => dataflowSkill.Subscribe(null));
+            var skill = new DataflowSkillFake();
+            Assert.Throws<ArgumentNullException>(() => skill.Subscribe(null));
         }
 
         [Fact]
@@ -109,16 +109,16 @@ namespace Vyr.Skills.Tests
         {
             var request = new Request();
 
-            var dataflowSkill = new DataflowSkillFake();
-            dataflowSkill.Enable();
-            dataflowSkill.Subscribe(r =>
+            var skill = new DataflowSkillFake();
+            skill.Enable();
+            skill.Subscribe(r =>
             {
                 var response = (Response)r;
 
                 Assert.Equal(request, response.Request);
             });
 
-            await dataflowSkill.EnqueueAsync(request);
+            await skill.EnqueueAsync(request);
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
         }
@@ -129,22 +129,22 @@ namespace Vyr.Skills.Tests
             var responseCount = 0;
             var request = new Request();
 
-            var dataflowSkill = new DataflowSkillFake();
-            dataflowSkill.Enable();
-            dataflowSkill.Subscribe(r =>
+            var skill = new DataflowSkillFake();
+            skill.Enable();
+            skill.Subscribe(r =>
             {
                 var response = (Response)r;
                 Assert.Equal(request, response.Request);
                 responseCount++;
             });
-            dataflowSkill.Subscribe(r =>
+            skill.Subscribe(r =>
             {
                 var response = (Response)r;
                 Assert.Equal(request, response.Request);
                 responseCount++;
             });
 
-            await dataflowSkill.EnqueueAsync(request);
+            await skill.EnqueueAsync(request);
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
@@ -154,13 +154,13 @@ namespace Vyr.Skills.Tests
         [Fact]
         public void Disable_should_set_IsEnabled_to_false()
         {
-            var dataflowSkill = new DataflowSkill();
+            var skill = new DataflowSkill();
 
-            dataflowSkill.Enable();
-            Assert.True(dataflowSkill.IsEnabled);
+            skill.Enable();
+            Assert.True(skill.IsEnabled);
 
-            dataflowSkill.Disable();
-            Assert.False(dataflowSkill.IsEnabled);
+            skill.Disable();
+            Assert.False(skill.IsEnabled);
         }
     }
 }
