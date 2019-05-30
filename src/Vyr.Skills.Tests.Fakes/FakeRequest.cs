@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Vyr.Skills.Tests
+namespace Vyr.Skills.Tests.Fakes
 {
-    public class Request : IRequest
+    public class FakeRequest : IRequest
     {
-        public Request()
+        public FakeRequest()
         {
             this.Id = Guid.NewGuid().ToString();
         }

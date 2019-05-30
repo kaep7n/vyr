@@ -1,10 +1,10 @@
 ﻿using System;
 
-namespace Vyr.Skills.Tests
+namespace Vyr.Skills.Tests.Fakes
 {
-    public class Response : IResponse
+    public class FakeResponse : IResponse
     {
-        public Response(IRequest request)
+        public FakeResponse(IRequest request)
         {
             if (request is null)
             {
