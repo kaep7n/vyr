@@ -8,8 +8,9 @@ namespace Vyr.Skills
     {
         private readonly ITargetBlock<IRequest> incomingTargetBlock;
         private readonly BufferBlock<IRequest> incomingBlock = new BufferBlock<IRequest>();
-
         private readonly BroadcastBlock<IResponse> outgoingBlock = new BroadcastBlock<IResponse>(i => { return i; });
+
+        private IDisposable incomingBlockLink;
 
         public DataflowSkill()
         {
@@ -22,7 +23,7 @@ namespace Vyr.Skills
 
         public void Enable()
         {
-            this.incomingBlock.LinkTo(this.incomingTargetBlock, new DataflowLinkOptions { PropagateCompletion = true });
+            this.incomingBlockLink = this.incomingBlock.LinkTo(this.incomingTargetBlock, new DataflowLinkOptions { PropagateCompletion = true });
             this.IsEnabled = true;
         }
 
@@ -53,6 +54,7 @@ namespace Vyr.Skills
 
         public void Disable()
         {
+            this.incomingBlockLink.Dispose();
             this.IsEnabled = false;
         }
 
