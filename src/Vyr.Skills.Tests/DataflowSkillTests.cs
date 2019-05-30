@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
@@ -16,19 +17,15 @@ namespace Vyr.Skills.Tests
         }
 
         [Fact]
-        public void Disable_should_set_IsEnabled_to_false()
+        public async Task EnqueueAsync_should_throw_ArgumentNullException()
         {
             var dataflowSkill = new DataflowSkill();
 
-            dataflowSkill.Enable();
-            Assert.True(dataflowSkill.IsEnabled);
-
-            dataflowSkill.Disable();
-            Assert.False(dataflowSkill.IsEnabled);
+            await Assert.ThrowsAsync<ArgumentNullException>(() => dataflowSkill.EnqueueAsync(null));
         }
 
         [Fact]
-        public async Task Enqueue_to_enabled_skill_should_process_job()
+        public async Task EnqueueAsync_to_enabled_skill_should_process_request()
         {
             var dataflowSkill = new DataflowSkillFake();
             dataflowSkill.Enable();
@@ -41,7 +38,7 @@ namespace Vyr.Skills.Tests
         }
 
         [Fact]
-        public async Task Enqueue_to_not_enabled_skill_should_not_process_job()
+        public async Task EnqueueAsync_to_not_enabled_skill_should_not_process_request()
         {
             var dataflowSkill = new DataflowSkillFake();
             await dataflowSkill.EnqueueAsync(new Request());
@@ -50,7 +47,7 @@ namespace Vyr.Skills.Tests
         }
 
         [Fact]
-        public async Task Enqueue_to_disabled_skill_should_not_process_job()
+        public async Task EnqueueAsync_to_disabled_skill_should_not_process_request()
         {
             var dataflowSkill = new DataflowSkillFake();
 
@@ -58,7 +55,7 @@ namespace Vyr.Skills.Tests
             Assert.False(dataflowSkill.HasProcessedAnyRequests());
 
             dataflowSkill.Enable();
-            
+
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
@@ -66,7 +63,7 @@ namespace Vyr.Skills.Tests
         }
 
         [Fact]
-        public async Task Enqueue_should_process_job_when_enabled_but_not_after_disable()
+        public async Task EnqueueAsync_should_process_request_when_enabled_but_not_after_disable()
         {
             var dataflowSkill = new DataflowSkillFake();
             dataflowSkill.Enable();
@@ -87,7 +84,7 @@ namespace Vyr.Skills.Tests
         }
 
         [Fact]
-        public async Task Enqueue_should_process_job_only_once_when_enabled_was_called_multiple_times()
+        public async Task EnqueueAsync_should_process_request_only_once_when_enabled_was_called_multiple_times()
         {
             var dataflowSkill = new DataflowSkillFake();
             dataflowSkill.Enable();
@@ -101,50 +98,69 @@ namespace Vyr.Skills.Tests
         }
 
         [Fact]
-        public async Task Subscribe_should_send_result_to_target_action()
+        public void Subscribe_should_throw_ArgumentNullException()
         {
-            var incomingJob = new Request();
-
             var dataflowSkill = new DataflowSkillFake();
-            dataflowSkill.Enable();
-            dataflowSkill.Subscribe(r =>
-            {
-                var result = (Response)r;
-
-                Assert.Equal(incomingJob, result.Request);
-            });
-            
-            await dataflowSkill.EnqueueAsync(incomingJob);
-            // wait for processing (there should be a prettier and reliable solution)
-            Thread.Sleep(10);
+            Assert.Throws<ArgumentNullException>(() => dataflowSkill.Subscribe(null));
         }
 
         [Fact]
-        public async Task Subscribe_should_send_result_to_multiple_target_actions()
+        public async Task Subscribe_should_send_response_to_target_action()
         {
-            var resultCount = 0;
             var request = new Request();
 
             var dataflowSkill = new DataflowSkillFake();
             dataflowSkill.Enable();
             dataflowSkill.Subscribe(r =>
             {
-                var result = (Response)r;
-                Assert.Equal(request, result.Request);
-                resultCount++;
+                var response = (Response)r;
+
+                Assert.Equal(request, response.Request);
+            });
+
+            await dataflowSkill.EnqueueAsync(request);
+            // wait for processing (there should be a prettier and reliable solution)
+            Thread.Sleep(10);
+        }
+
+        [Fact]
+        public async Task Subscribe_should_send_response_to_multiple_target_actions()
+        {
+            var responseCount = 0;
+            var request = new Request();
+
+            var dataflowSkill = new DataflowSkillFake();
+            dataflowSkill.Enable();
+            dataflowSkill.Subscribe(r =>
+            {
+                var response = (Response)r;
+                Assert.Equal(request, response.Request);
+                responseCount++;
             });
             dataflowSkill.Subscribe(r =>
             {
-                var result = (Response)r;
-                Assert.Equal(request, result.Request);
-                resultCount++;
+                var response = (Response)r;
+                Assert.Equal(request, response.Request);
+                responseCount++;
             });
 
             await dataflowSkill.EnqueueAsync(request);
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.Equal(2, resultCount);
+            Assert.Equal(2, responseCount);
+        }
+
+        [Fact]
+        public void Disable_should_set_IsEnabled_to_false()
+        {
+            var dataflowSkill = new DataflowSkill();
+
+            dataflowSkill.Enable();
+            Assert.True(dataflowSkill.IsEnabled);
+
+            dataflowSkill.Disable();
+            Assert.False(dataflowSkill.IsEnabled);
         }
     }
 }
