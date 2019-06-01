@@ -1,5 +1,6 @@
 using Homematic.Api.Xml;
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,9 @@ namespace Homematic.Skills.Tests
         [Fact]
         public async Task Test()
         {
+            var stopwatch = Stopwatch.StartNew();
+
+            var responseCount = 0;
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri("http://192.168.2.101/config/xmlapi/");
 
@@ -35,12 +39,17 @@ namespace Homematic.Skills.Tests
 
             skill.Subscribe(r =>
             {
-                this.output.WriteLine(((ReadDeviceListResponse)r).Device.Name);
+                responseCount++;
+                this.output.WriteLine($"{stopwatch.Elapsed} {responseCount} {((ReadDeviceListResponse)r).Device.Name}");
             });
 
+            this.output.WriteLine($"{stopwatch.Elapsed} sending request");
             await skill.EnqueueAsync(new ReadDeviceListRequest());
+            this.output.WriteLine($"{stopwatch.Elapsed} sent request");
 
-            Thread.Sleep(5000);
+            Thread.Sleep(2000);
+
+            Assert.Equal(25, responseCount);
         }
     }
 }
