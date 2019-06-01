@@ -17,6 +17,14 @@ variables:
 steps:
 - task: NuGetToolInstaller@0
 
+- task: UseDotNet@2
+  displayName: 'Use .NET Core sdk'
+  inputs:
+    packageType: sdk
+    includePreviewVersions: true
+    version: 3.0.x
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
