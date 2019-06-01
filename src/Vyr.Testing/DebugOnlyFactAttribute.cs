@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Xunit;
 
-namespace Homematic.Api.Xml.Tests
+namespace Vyr.Testing
 {
     public class DebugOnlyFactAttribute : FactAttribute
     {

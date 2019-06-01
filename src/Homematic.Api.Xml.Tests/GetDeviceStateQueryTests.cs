@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Vyr.Testing;
 using Xunit;
 
 namespace Homematic.Api.Xml.Tests
