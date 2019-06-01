@@ -8,7 +8,7 @@ namespace Vyr.Agents.Tests.Fakes
     {
         private readonly List<IMessage> processedMessages = new List<IMessage>();
 
-        public DataflowAgentFake(IEnumerable<ISkill> skills) 
+        public DataflowAgentFake(IEnumerable<ISkill> skills)
             : base(skills)
         {
         }

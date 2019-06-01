@@ -29,7 +29,6 @@ namespace Homematic.Skills.Tests
             httpClient.BaseAddress = new Uri("http://192.168.2.101/config/xmlapi/");
 
             var getDeviceListQuery = new GetDeviceListQuery(httpClient);
-            //var devices = await getDeviceListQuery.ExecuteAsync();
 
             var skill = new ReadDeviceList(getDeviceListQuery);
             skill.Enable();

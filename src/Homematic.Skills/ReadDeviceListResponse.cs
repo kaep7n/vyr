@@ -1,7 +1,5 @@
 ﻿using Homematic.Api.Xml;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using Vyr.Skills;
 
 namespace Homematic.Skills
