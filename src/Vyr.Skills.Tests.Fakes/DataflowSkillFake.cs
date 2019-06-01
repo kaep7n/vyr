@@ -28,7 +28,7 @@ namespace Vyr.Skills.Tests.Fakes
 
             this.processedRequests.Add(request);
 
-            this.Publish(new FakeResponse(request));
+            this.PublishAsync(new FakeResponse(request));
 
             return base.ProcessAsync(request);
         }

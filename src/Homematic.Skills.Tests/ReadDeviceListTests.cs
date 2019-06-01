@@ -41,7 +41,7 @@ namespace Homematic.Skills.Tests
 
             await skill.EnqueueAsync(new ReadDeviceListRequest());
 
-            Thread.Sleep(1000);
+            Thread.Sleep(5000);
         }
     }
 }

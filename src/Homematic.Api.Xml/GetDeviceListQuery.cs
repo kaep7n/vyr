@@ -21,12 +21,10 @@ namespace Homematic.Api.Xml
 
         public async Task<DeviceList> ExecuteAsync()
         {
-            var result = await this.httpClient.GetAsync("devicelist.cgi");
-
-            using var resultStream = await result.Content.ReadAsStreamAsync();
+            using var stream = await this.httpClient.GetStreamAsync("devicelist.cgi");
 
             var serializer = new XmlSerializer(typeof(DeviceList));
-            return (DeviceList)serializer.Deserialize(resultStream);
+            return (DeviceList)serializer.Deserialize(stream);
         }
     }
 }

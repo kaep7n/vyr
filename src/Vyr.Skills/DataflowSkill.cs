@@ -58,14 +58,14 @@ namespace Vyr.Skills
             this.IsEnabled = false;
         }
 
-        protected void Publish(IResponse response)
+        protected async Task PublishAsync(IResponse response)
         {
             if (response is null)
             {
                 throw new ArgumentNullException(nameof(response));
             }
 
-            this.outgoingBlock.SendAsync(response);
+            await this.outgoingBlock.SendAsync(response);
         }
 
         protected virtual Task ProcessAsync(IRequest request)

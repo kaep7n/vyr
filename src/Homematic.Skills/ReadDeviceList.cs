@@ -26,11 +26,11 @@ namespace Homematic.Skills
                 return;
             }
 
-            var deviceList = await this.getDeviceListQuery.ExecuteAsync().ConfigureAwait(false);
+            var deviceList = await this.getDeviceListQuery.ExecuteAsync();
 
             foreach (var device in deviceList.Devices)
             {
-                this.Publish(new ReadDeviceListResponse(device));
+                await this.PublishAsync(new ReadDeviceListResponse(device));
             }
         }
     }
