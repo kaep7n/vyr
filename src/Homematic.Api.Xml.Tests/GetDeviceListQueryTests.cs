@@ -1,5 +1,4 @@
 using Homematic.Testing;
-using Homematic.Testing.Properties;
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -12,7 +11,8 @@ namespace Homematic.Api.Xml.Tests
         [Fact]
         public async Task ExecuteAsync()
         {
-            var httpClient = new HttpClient(new FakeHomematicHttpMessageHandler(Resources.Devicelist));
+            var deviceListXml = await new Resources().ReadDeviceListXmlAsync();
+            var httpClient = new HttpClient(new FakeHomematicHttpMessageHandler(deviceListXml));
             httpClient.BaseAddress = new Uri("http://baseurimustbeset.com/");
 
             var getDeviceListQuery = new GetDeviceListQuery(httpClient);

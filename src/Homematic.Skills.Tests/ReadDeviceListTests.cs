@@ -1,12 +1,9 @@
 using Homematic.Api.Xml;
 using Homematic.Testing;
-using Homematic.Testing.Properties;
 using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Vyr.Testing;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -31,9 +28,8 @@ namespace Homematic.Skills.Tests
         {
             var responseCount = 0;
 
-            this.output.WriteLine(Resources.Devicelist);
-
-            var httpClient = new HttpClient(new FakeHomematicHttpMessageHandler(Resources.Devicelist));
+            var deviceListXml = await new Resources().ReadDeviceListXmlAsync();
+            var httpClient = new HttpClient(new FakeHomematicHttpMessageHandler(deviceListXml));
             httpClient.BaseAddress = new Uri("http://baseurimustbeset.com/");
 
             var getDeviceListQuery = new GetDeviceListQuery(httpClient);
