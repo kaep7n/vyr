@@ -29,9 +29,9 @@ namespace Homematic.Skills.Tests
         [Fact]
         public async Task Test()
         {
-            var stopwatch = Stopwatch.StartNew();
-
             var responseCount = 0;
+
+            this.output.WriteLine(Resources.Devicelist);
 
             var httpClient = new HttpClient(new FakeHomematicHttpMessageHandler(Resources.Devicelist));
             httpClient.BaseAddress = new Uri("http://baseurimustbeset.com/");
@@ -44,12 +44,9 @@ namespace Homematic.Skills.Tests
             skill.Subscribe(r =>
             {
                 responseCount++;
-                this.output.WriteLine($"{stopwatch.Elapsed} {responseCount} {((ReadDeviceListResponse)r).Device.Name}");
             });
 
-            this.output.WriteLine($"{stopwatch.Elapsed} sending request");
             await skill.EnqueueAsync(new ReadDeviceListRequest());
-            this.output.WriteLine($"{stopwatch.Elapsed} sent request");
 
             Thread.Sleep(2000);
 
