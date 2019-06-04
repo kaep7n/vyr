@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Homematic.Skills\Homematic.Skills.csproj" />
+    <ProjectReference Include="..\Homematic.Testing\Homematic.Testing.csproj" />
     <ProjectReference Include="..\Vyr.Testing\Vyr.Testing.csproj" />
   </ItemGroup>
 

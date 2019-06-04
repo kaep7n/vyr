@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+<state>
+  <device name='Thermostat - Bad' ise_id='2074' unreach='false' sticky_unreach='true' config_pending='false' >
+    <channel name='Thermostat - Bad:0' ise_id='2075'>
+      <datapoint name='BidCos-RF.MEQ0863092:0.UNREACH' type='UNREACH' ise_id='2096' value='false' valuetype='2' valueunit='' timestamp='1559396782' />
+      <datapoint name='BidCos-RF.MEQ0863092:0.STICKY_UNREACH' type='STICKY_UNREACH' ise_id='2092' value='true' valuetype='2' valueunit='' timestamp='1558957814' />
+      <datapoint name='BidCos-RF.MEQ0863092:0.CONFIG_PENDING' type='CONFIG_PENDING' ise_id='2077' value='false' valuetype='2' valueunit='' timestamp='1559201140' />
+      <datapoint name='BidCos-RF.MEQ0863092:0.LOWBAT' type='LOWBAT' ise_id='2086' value='false' valuetype='2' valueunit='' timestamp='1559201140' />
+      <datapoint name='BidCos-RF.MEQ0863092:0.RSSI_DEVICE' type='RSSI_DEVICE' ise_id='2090' value='1' valuetype='8' valueunit='' timestamp='1559201140' />
+      <datapoint name='BidCos-RF.MEQ0863092:0.RSSI_PEER' type='RSSI_PEER' ise_id='2091' value='1' valuetype='8' valueunit='' timestamp='1559201140' />
+      <datapoint name='BidCos-RF.MEQ0863092:0.DEVICE_IN_BOOTLOADER' type='DEVICE_IN_BOOTLOADER' ise_id='2081' value='false' valuetype='2' valueunit='' timestamp='1559201140' />
+      <datapoint name='BidCos-RF.MEQ0863092:0.UPDATE_PENDING' type='UPDATE_PENDING' ise_id='2100' value='false' valuetype='2' valueunit='' timestamp='1559201140' />
+    </channel>
+    <channel name='Thermostat - Bad - Temperature Sensor' ise_id='2104'>
+      <datapoint name='BidCos-RF.MEQ0863092:1.TEMPERATURE' type='TEMPERATURE' ise_id='2106' value='24.000000' valuetype='4' valueunit='°C' timestamp='1559674315' />
+      <datapoint name='BidCos-RF.MEQ0863092:1.HUMIDITY' type='HUMIDITY' ise_id='2105' value='59' valuetype='16' valueunit='%' timestamp='1559674315' />
+    </channel>
+    <channel name='Thermostat - Bad - Radiator Thermostat' ise_id='2107'>
+      <datapoint name='BidCos-RF.MEQ0863092:2.CONTROL_MODE' type='CONTROL_MODE' ise_id='2116' value='1' valuetype='16' valueunit='' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.LOWBAT_REPORTING' type='LOWBAT_REPORTING' ise_id='2117' value='false' valuetype='2' valueunit='' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.COMMUNICATION_REPORTING' type='COMMUNICATION_REPORTING' ise_id='2115' value='false' valuetype='2' valueunit='' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.WINDOW_OPEN_REPORTING' type='WINDOW_OPEN_REPORTING' ise_id='2131' value='false' valuetype='2' valueunit='' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.BATTERY_STATE' type='BATTERY_STATE' ise_id='2111' value='2.500000' valuetype='4' valueunit='V' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.BOOST_STATE' type='BOOST_STATE' ise_id='2113' value='0' valuetype='16' valueunit='min' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.ACTUAL_TEMPERATURE' type='ACTUAL_TEMPERATURE' ise_id='2109' value='24.000000' valuetype='4' valueunit='°C' timestamp='1559674295' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.ACTUAL_HUMIDITY' type='ACTUAL_HUMIDITY' ise_id='2108' value='59.000000' valuetype='4' valueunit='%' timestamp='1559674295' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.SET_TEMPERATURE' type='SET_TEMPERATURE' ise_id='2130' value='23.000000' valuetype='4' valueunit='°C' timestamp='1559674295' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.AUTO_MODE' type='AUTO_MODE' ise_id='2110' value='' valuetype='2' valueunit='' timestamp='0' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.MANU_MODE' type='MANU_MODE' ise_id='2119' value='' valuetype='4' valueunit='°C' timestamp='0' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.BOOST_MODE' type='BOOST_MODE' ise_id='2112' value='' valuetype='2' valueunit='' timestamp='0' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.COMFORT_MODE' type='COMFORT_MODE' ise_id='2114' value='' valuetype='2' valueunit='' timestamp='0' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.LOWERING_MODE' type='LOWERING_MODE' ise_id='2118' value='' valuetype='2' valueunit='' timestamp='0' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_MODE_SUBMIT' type='PARTY_MODE_SUBMIT' ise_id='2120' value='' valuetype='20' valueunit='' timestamp='0' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_TEMPERATURE' type='PARTY_TEMPERATURE' ise_id='2129' value='5.000000' valuetype='4' valueunit='°C' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_START_TIME' type='PARTY_START_TIME' ise_id='2123' value='0' valuetype='16' valueunit='minutes' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_START_DAY' type='PARTY_START_DAY' ise_id='2121' value='1' valuetype='16' valueunit='day' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_START_MONTH' type='PARTY_START_MONTH' ise_id='2122' value='1' valuetype='16' valueunit='month' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_START_YEAR' type='PARTY_START_YEAR' ise_id='2124' value='0' valuetype='16' valueunit='year' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_STOP_TIME' type='PARTY_STOP_TIME' ise_id='2127' value='0' valuetype='16' valueunit='minutes' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_STOP_DAY' type='PARTY_STOP_DAY' ise_id='2125' value='1' valuetype='16' valueunit='day' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_STOP_MONTH' type='PARTY_STOP_MONTH' ise_id='2126' value='1' valuetype='16' valueunit='month' timestamp='1559671720' />
+      <datapoint name='BidCos-RF.MEQ0863092:2.PARTY_STOP_YEAR' type='PARTY_STOP_YEAR' ise_id='2128' value='0' valuetype='16' valueunit='year' timestamp='1559671720' />
+    </channel>
+    <channel name='Thermostat - Bad - Shutter Contact' ise_id='2132'></channel>
+    <channel name='Thermostat - Bad - Button' ise_id='2133'></channel>
+    <channel name='Thermostat - Bad - Switch Actor' ise_id='2134'>
+      <datapoint name='BidCos-RF.MEQ0863092:7.DECISION_VALUE' type='DECISION_VALUE' ise_id='2135' value='0' valuetype='16' valueunit='' timestamp='1559674222' />
+    </channel>
+  </device>
+</state>

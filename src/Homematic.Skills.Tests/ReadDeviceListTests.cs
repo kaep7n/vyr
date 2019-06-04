@@ -1,4 +1,6 @@
 using Homematic.Api.Xml;
+using Homematic.Testing;
+using Homematic.Testing.Properties;
 using System;
 using System.Diagnostics;
 using System.Net.Http;
@@ -24,14 +26,15 @@ namespace Homematic.Skills.Tests
             this.output = output;
         }
 
-        [DebugOnlyFact]
+        [Fact]
         public async Task Test()
         {
             var stopwatch = Stopwatch.StartNew();
 
             var responseCount = 0;
-            var httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri("http://192.168.2.101/config/xmlapi/");
+
+            var httpClient = new HttpClient(new FakeHomematicHttpMessageHandler(Resources.Devicelist));
+            httpClient.BaseAddress = new Uri("http://baseurimustbeset.com/");
 
             var getDeviceListQuery = new GetDeviceListQuery(httpClient);
 
