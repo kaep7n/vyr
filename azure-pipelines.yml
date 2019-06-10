@@ -10,8 +10,7 @@ pool:
   vmImage: 'ubuntu-16.04'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
+  solution: 'src/vyr.sln'
   buildConfiguration: 'Release'
 
 steps:
