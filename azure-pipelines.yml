@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'linux-latest'
+  vmImage: 'windows-latest'
 
 variables:
   solution: '**/*.sln'
@@ -26,17 +26,18 @@ steps:
   displayName: 'restore'
   inputs:
     command: 'restore'
-    projects: 'src/vyr.sln'
-    feedsToUse: 'select'
+    projects: $solution
 
 - task: DotNetCoreCLI@2
   displayName: 'build'
   inputs:
     command: 'build'
-    projects: 'src/vyr.sln'
+    configuration: $buildConfiguration
+    projects: $solution
 
 - task: DotNetCoreCLI@2
   displayName: 'test'
   inputs:
     command: 'test'
-    projects: 'src/vyr.sln'
+    configuration: $buildConfiguration
+    projects: $solution
