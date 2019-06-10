@@ -26,6 +26,7 @@ steps:
   inputs:
     command: 'restore'
     projects: $solution
+    feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   displayName: 'build'
