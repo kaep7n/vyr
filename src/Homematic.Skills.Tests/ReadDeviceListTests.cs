@@ -11,18 +11,6 @@ namespace Homematic.Skills.Tests
 {
     public class ReadDeviceListTests
     {
-        private readonly ITestOutputHelper output;
-
-        public ReadDeviceListTests(ITestOutputHelper output)
-        {
-            if (output is null)
-            {
-                throw new ArgumentNullException(nameof(output));
-            }
-
-            this.output = output;
-        }
-
         [Fact]
         public async Task Test()
         {
