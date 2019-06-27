@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Vyr.Agents;
+using Vyr.Core;
 
 namespace Vyr.Playground.Agents
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Vyr.Core;
 
-namespace Vyr.Agents.Tests.Fakes
+namespace Vyr.Skills.Tests.Fakes
 {
     public class FakeMessage : IMessage
     {

@@ -30,7 +30,7 @@ namespace Vyr.Skills.Tests
         {
             var skill = new DataflowSkillFake();
             skill.Enable();
-            await skill.EnqueueAsync(new FakeRequest());
+            await skill.EnqueueAsync(new FakeMessage());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -42,7 +42,7 @@ namespace Vyr.Skills.Tests
         public async Task EnqueueAsync_to_not_enabled_skill_should_not_process_request()
         {
             var skill = new DataflowSkillFake();
-            await skill.EnqueueAsync(new FakeRequest());
+            await skill.EnqueueAsync(new FakeMessage());
 
             Assert.False(skill.HasProcessedAnyRequests());
         }
@@ -52,7 +52,7 @@ namespace Vyr.Skills.Tests
         {
             var skill = new DataflowSkillFake();
 
-            await skill.EnqueueAsync(new FakeRequest());
+            await skill.EnqueueAsync(new FakeMessage());
             Assert.False(skill.HasProcessedAnyRequests());
 
             skill.Enable();
@@ -68,7 +68,7 @@ namespace Vyr.Skills.Tests
         {
             var skill = new DataflowSkillFake();
             skill.Enable();
-            await skill.EnqueueAsync(new FakeRequest());
+            await skill.EnqueueAsync(new FakeMessage());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -76,7 +76,7 @@ namespace Vyr.Skills.Tests
             Assert.Equal(1, skill.GetProcessedRequestsCount());
 
             skill.Disable();
-            await skill.EnqueueAsync(new FakeRequest());
+            await skill.EnqueueAsync(new FakeMessage());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -90,7 +90,7 @@ namespace Vyr.Skills.Tests
             var skill = new DataflowSkillFake();
             skill.Enable();
             skill.Enable();
-            await skill.EnqueueAsync(new FakeRequest());
+            await skill.EnqueueAsync(new FakeMessage());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -108,15 +108,15 @@ namespace Vyr.Skills.Tests
         [Fact]
         public async Task Subscribe_should_send_response_to_target_action()
         {
-            var request = new FakeRequest();
+            var request = new FakeMessage();
 
             var skill = new DataflowSkillFake();
             skill.Enable();
             skill.Subscribe(r =>
             {
-                var response = (FakeResponse)r;
+                var result = (FakeResultMessage)r;
 
-                Assert.Equal(request, response.Request);
+                Assert.Equal(request, result.SourceMessage);
             });
 
             await skill.EnqueueAsync(request);
@@ -128,20 +128,20 @@ namespace Vyr.Skills.Tests
         public async Task Subscribe_should_send_response_to_multiple_target_actions()
         {
             var responseCount = 0;
-            var request = new FakeRequest();
+            var request = new FakeMessage();
 
             var skill = new DataflowSkillFake();
             skill.Enable();
             skill.Subscribe(r =>
             {
-                var response = (FakeResponse)r;
-                Assert.Equal(request, response.Request);
+                var result = (FakeResultMessage)r;
+                Assert.Equal(request, result.SourceMessage);
                 responseCount++;
             });
             skill.Subscribe(r =>
             {
-                var response = (FakeResponse)r;
-                Assert.Equal(request, response.Request);
+                var result = (FakeResultMessage)r;
+                Assert.Equal(request, result.SourceMessage);
                 responseCount++;
             });
 

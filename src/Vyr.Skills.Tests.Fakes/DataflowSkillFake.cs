@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Vyr.Core;
 
 namespace Vyr.Skills.Tests.Fakes
 {
     public class DataflowSkillFake : DataflowSkill
     {
-        private readonly List<IRequest> processedRequests = new List<IRequest>();
+        private readonly List<IMessage> processedRequests = new List<IMessage>();
 
         public bool HasProcessedAnyRequests()
         {
@@ -19,18 +20,18 @@ namespace Vyr.Skills.Tests.Fakes
             return this.processedRequests.Count;
         }
 
-        protected override Task ProcessAsync(IRequest request)
+        protected override async Task ProcessAsync(IMessage message)
         {
-            if (request is null)
+            if (message is null)
             {
-                throw new ArgumentNullException(nameof(request));
+                throw new ArgumentNullException(nameof(message));
             }
 
-            this.processedRequests.Add(request);
+            this.processedRequests.Add(message);
 
-            this.PublishAsync(new FakeResponse(request));
+            await this.PublishAsync(new FakeResultMessage(message));
 
-            return base.ProcessAsync(request);
+            await base.ProcessAsync(message);
         }
     }
 }

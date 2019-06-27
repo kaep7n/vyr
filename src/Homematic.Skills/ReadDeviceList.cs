@@ -1,6 +1,7 @@
 ﻿using Homematic.Api.Xml;
 using System;
 using System.Threading.Tasks;
+using Vyr.Core;
 using Vyr.Skills;
 
 namespace Homematic.Skills
@@ -19,9 +20,9 @@ namespace Homematic.Skills
             this.getDeviceListQuery = getDeviceListQuery;
         }
 
-        protected override async Task ProcessAsync(IRequest request)
+        protected override async Task ProcessAsync(IMessage message)
         {
-            if (!(request is ReadDeviceListRequest))
+            if (!(message is ReadDeviceListRequest))
             {
                 return;
             }

@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Vyr.Core;
 
 namespace Vyr.Skills
 {
     public interface ISkill
     {
-        string Topic { get; }
-
         bool IsEnabled { get; }
 
         void Enable();
 
-        Task EnqueueAsync(IRequest request);
+        Task EnqueueAsync(IMessage message);
 
-        void Subscribe(Action<IResponse> target);
+        void Subscribe(Action<IMessage> message);
 
         void Disable();
     }

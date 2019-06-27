@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Vyr.Core;
 using Vyr.Skills;
 
 namespace Vyr.Agents.Tests.Fakes
@@ -28,7 +29,7 @@ namespace Vyr.Agents.Tests.Fakes
             this.processedMessages.Add(message);
         }
 
-        protected override void ProcessResponse(IResponse response)
+        protected override void ProcessResult(IMessage message)
         {
         }
     }

@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Vyr.Core;
 
 namespace Vyr.Skills
 {
     public class DataflowSkill : ISkill
     {
-        private readonly ITargetBlock<IRequest> incomingTargetBlock;
-        private readonly BufferBlock<IRequest> incomingBlock = new BufferBlock<IRequest>();
-        private readonly BroadcastBlock<IResponse> outgoingBlock = new BroadcastBlock<IResponse>(i => { return i; });
+        private readonly ITargetBlock<IMessage> incomingTargetBlock;
+        private readonly BufferBlock<IMessage> incomingBlock = new BufferBlock<IMessage>();
+        private readonly BroadcastBlock<IMessage> outgoingBlock = new BroadcastBlock<IMessage>(i => i);
 
         private IDisposable incomingBlockLink;
 
         public DataflowSkill()
         {
-            this.incomingTargetBlock = new ActionBlock<IRequest>(this.ProcessAsync);
+            this.incomingTargetBlock = new ActionBlock<IMessage>(this.ProcessAsync);
         }
 
         public bool IsEnabled { get; private set; }
@@ -27,11 +28,11 @@ namespace Vyr.Skills
             this.IsEnabled = true;
         }
 
-        public async Task EnqueueAsync(IRequest request)
+        public async Task EnqueueAsync(IMessage message)
         {
-            if (request is null)
+            if (message is null)
             {
-                throw new ArgumentNullException(nameof(request));
+                throw new ArgumentNullException(nameof(message));
             }
 
             if (!this.IsEnabled)
@@ -39,17 +40,17 @@ namespace Vyr.Skills
                 return;
             }
 
-            await this.incomingBlock.SendAsync(request);
+            await this.incomingBlock.SendAsync(message);
         }
 
-        public void Subscribe(Action<IResponse> target)
+        public void Subscribe(Action<IMessage> message)
         {
-            if (target == null)
+            if (message == null)
             {
-                throw new ArgumentNullException(nameof(target));
+                throw new ArgumentNullException(nameof(message));
             }
 
-            this.outgoingBlock.LinkTo(new ActionBlock<IResponse>(target));
+            this.outgoingBlock.LinkTo(new ActionBlock<IMessage>(message));
         }
 
         public void Disable()
@@ -58,17 +59,17 @@ namespace Vyr.Skills
             this.IsEnabled = false;
         }
 
-        protected async Task PublishAsync(IResponse response)
+        protected async Task PublishAsync(IMessage message)
         {
-            if (response is null)
+            if (message is null)
             {
-                throw new ArgumentNullException(nameof(response));
+                throw new ArgumentNullException(nameof(message));
             }
 
-            await this.outgoingBlock.SendAsync(response);
+            await this.outgoingBlock.SendAsync(message);
         }
 
-        protected virtual Task ProcessAsync(IRequest request)
+        protected virtual Task ProcessAsync(IMessage message)
         {
             return Task.CompletedTask;
         }

@@ -1,10 +1,10 @@
 ﻿using Homematic.Api.Xml;
 using System;
-using Vyr.Skills;
+using Vyr.Core;
 
 namespace Homematic.Skills
 {
-    public class ReadDeviceListResponse : IResponse
+    public class ReadDeviceListResponse : IMessage
     {
         public ReadDeviceListResponse(Device device)
         {
@@ -13,11 +13,13 @@ namespace Homematic.Skills
                 throw new ArgumentNullException(nameof(device));
             }
 
-            this.Id = Guid.NewGuid().ToString();
+            this.Id = new Id();
             this.Device = device;
         }
 
         public string Id { get; }
+
+        public DateTime CreatedAt { get; }
 
         public Device Device { get; }
     }

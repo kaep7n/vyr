@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Vyr.Core;
 
 namespace Vyr.Agents
 {

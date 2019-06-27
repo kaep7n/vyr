@@ -38,7 +38,7 @@ namespace Vyr.Agents.Tests
             var agent = new DataflowAgentFake(Enumerable.Empty<ISkill>());
             agent.Run();
 
-            await agent.EnqueueAsync(new FakeMessage());
+            await agent.EnqueueAsync(new Fakes.FakeMessage());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -52,11 +52,11 @@ namespace Vyr.Agents.Tests
             var agent = new DataflowAgentFake(Enumerable.Empty<ISkill>());
 
             agent.Run();
-            await agent.EnqueueAsync(new FakeMessage());
+            await agent.EnqueueAsync(new Fakes.FakeMessage());
             Thread.Sleep(10);
 
             agent.Idle();
-            await agent.EnqueueAsync(new FakeMessage());
+            await agent.EnqueueAsync(new Fakes.FakeMessage());
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);

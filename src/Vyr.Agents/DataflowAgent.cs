@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using Vyr.Core;
 using Vyr.Skills;
 
 namespace Vyr.Agents
@@ -33,7 +34,7 @@ namespace Vyr.Agents
             foreach (var skill in this.skills)
             {
                 skill.Enable();
-                skill.Subscribe(this.ProcessResponse);
+                skill.Subscribe(this.ProcessResult);
             }
 
             this.incomingBlockLink = this.incomingBlock.LinkTo(this.incomingTargetBlock);
@@ -54,7 +55,7 @@ namespace Vyr.Agents
         {
         }
 
-        protected virtual void ProcessResponse(IResponse response)
+        protected virtual void ProcessResult(IMessage message)
         {
         }
 
