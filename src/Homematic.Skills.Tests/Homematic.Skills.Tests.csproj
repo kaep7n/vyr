@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -19,7 +19,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Homematic.Skills\Homematic.Skills.csproj" />
     <ProjectReference Include="..\Homematic.Testing\Homematic.Testing.csproj" />
-    <ProjectReference Include="..\Vyr.Testing\Vyr.Testing.csproj" />
   </ItemGroup>
 
 </Project>
