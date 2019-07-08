@@ -19,8 +19,10 @@ namespace Vyr.Skills.Tests.Fakes
 
         public string Id { get; }
 
-        public IMessage SourceMessage { get; }
+        public string Topic { get; }
 
         public DateTime CreatedAt { get; }
+
+        public IMessage SourceMessage { get; }
     }
 }

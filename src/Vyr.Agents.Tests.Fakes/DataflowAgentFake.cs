@@ -28,9 +28,5 @@ namespace Vyr.Agents.Tests.Fakes
         {
             this.processedMessages.Add(message);
         }
-
-        protected override void ProcessResult(IMessage message)
-        {
-        }
     }
 }

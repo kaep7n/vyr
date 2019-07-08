@@ -13,6 +13,8 @@ namespace Homematic.Skills
 
         public string Id { get; }
 
+        public string Topic { get; }
+
         public DateTime CreatedAt { get; }
     }
 }

@@ -34,7 +34,7 @@ namespace Vyr.Agents
             foreach (var skill in this.skills)
             {
                 skill.Enable();
-                skill.Subscribe(this.ProcessResult);
+                skill.Subscribe(this.ProcessMessage);
             }
 
             this.incomingBlockLink = this.incomingBlock.LinkTo(this.incomingTargetBlock);
@@ -52,10 +52,6 @@ namespace Vyr.Agents
         }
 
         protected virtual void ProcessMessage(IMessage message)
-        {
-        }
-
-        protected virtual void ProcessResult(IMessage message)
         {
         }
 

@@ -6,6 +6,8 @@ namespace Vyr.Core
     {
         string Id { get; }
 
+        string Topic { get; }
+
         DateTime CreatedAt { get; }
     }
 }
