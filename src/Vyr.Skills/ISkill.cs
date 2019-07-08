@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Vyr.Core;
 
 namespace Vyr.Skills
@@ -8,9 +9,9 @@ namespace Vyr.Skills
     {
         bool IsEnabled { get; }
 
-        void Enable();
+        string[] AcceptedTopics { get; }
 
-        Task EnqueueAsync(IMessage message);
+        void Enable();
 
         void Subscribe(Action<IMessage> message);
 

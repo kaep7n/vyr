@@ -8,39 +8,30 @@ namespace Vyr.Skills
     public class DataflowSkill : ISkill
     {
         private readonly ITargetBlock<IMessage> incomingTargetBlock;
-        private readonly BufferBlock<IMessage> incomingBlock = new BufferBlock<IMessage>();
-        private readonly BroadcastBlock<IMessage> outgoingBlock = new BroadcastBlock<IMessage>(i => i);
 
+        private readonly BufferBlock<IMessage> incomingBlock = new BufferBlock<IMessage>();
+        private readonly BufferBlock<IMessage> outgoingBlock = new BufferBlock<IMessage>();
+        private readonly ISourceBlock<IMessage> sourceBlock;
+
+        private IDisposable sourceBlockLink;
         private IDisposable incomingBlockLink;
 
-        public DataflowSkill()
+        public DataflowSkill(ISourceBlock<IMessage> source)
         {
             this.incomingTargetBlock = new ActionBlock<IMessage>(this.ProcessAsync);
+            this.sourceBlock = source;
         }
 
         public bool IsEnabled { get; private set; }
 
-        public string Topic { get; private set; }
+        public string[] AcceptedTopics { get; private set; }
 
         public void Enable()
         {
-            this.incomingBlockLink = this.incomingBlock.LinkTo(this.incomingTargetBlock, new DataflowLinkOptions { PropagateCompletion = true });
+            this.sourceBlockLink = this.sourceBlock.LinkTo(this.incomingBlock);
+
+            this.incomingBlockLink = this.incomingBlock.LinkTo(this.incomingTargetBlock);
             this.IsEnabled = true;
-        }
-
-        public async Task EnqueueAsync(IMessage message)
-        {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            if (!this.IsEnabled)
-            {
-                return;
-            }
-
-            await this.incomingBlock.SendAsync(message);
         }
 
         public void Subscribe(Action<IMessage> message)
@@ -55,7 +46,12 @@ namespace Vyr.Skills
 
         public void Disable()
         {
+            this.sourceBlockLink.Dispose();
+            this.sourceBlockLink = null;
+
             this.incomingBlockLink.Dispose();
+            this.incomingBlockLink = null;
+
             this.IsEnabled = false;
         }
 

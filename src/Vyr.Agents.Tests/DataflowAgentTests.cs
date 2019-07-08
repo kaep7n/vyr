@@ -1,7 +1,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Vyr.Agents.Tests.Fakes;
+using Vyr.Core;
 using Vyr.Skills;
 using Vyr.Skills.Tests.Fakes;
 using Xunit;
@@ -24,7 +26,8 @@ namespace Vyr.Agents.Tests
         [Fact]
         public void Run_should_enable_skills()
         {
-            var skills = new[] { new DataflowSkillFake(), new DataflowSkillFake(), new DataflowSkillFake() };
+            var source = new BufferBlock<IMessage>();
+            var skills = new[] { new DataflowSkillFake(source), new DataflowSkillFake(source), new DataflowSkillFake(source) };
 
             var agent = new DataflowAgentFake(skills);
             agent.Run();

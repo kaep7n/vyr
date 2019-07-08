@@ -4,6 +4,8 @@ using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
+using Vyr.Core;
 using Xunit;
 
 namespace Homematic.Skills.Tests
@@ -21,7 +23,9 @@ namespace Homematic.Skills.Tests
 
             var getDeviceListQuery = new GetDeviceListQuery(httpClient);
 
-            var skill = new ReadDeviceList(getDeviceListQuery);
+            var source = new BufferBlock<IMessage>();
+
+            var skill = new ReadDeviceList(source, getDeviceListQuery);
             skill.Enable();
 
             skill.Subscribe(r =>
@@ -29,7 +33,7 @@ namespace Homematic.Skills.Tests
                 responseCount++;
             });
 
-            await skill.EnqueueAsync(new ReadDeviceListRequest());
+            await source.SendAsync(new ReadDeviceListRequest());
 
             Thread.Sleep(2000);
 

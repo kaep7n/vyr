@@ -1,6 +1,7 @@
 ﻿using Homematic.Api.Xml;
 using System;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Vyr.Core;
 using Vyr.Skills;
 
@@ -10,7 +11,8 @@ namespace Homematic.Skills
     {
         private readonly GetDeviceListQuery getDeviceListQuery;
 
-        public ReadDeviceList(GetDeviceListQuery getDeviceListQuery)
+        public ReadDeviceList(ISourceBlock<IMessage> source, GetDeviceListQuery getDeviceListQuery)
+            : base(source)
         {
             if (getDeviceListQuery is null)
             {
