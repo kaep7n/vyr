@@ -13,8 +13,6 @@ namespace Vyr.Skills
 
         void Enable();
 
-        void Subscribe(Action<IMessage> message);
-
         void Disable();
     }
 }

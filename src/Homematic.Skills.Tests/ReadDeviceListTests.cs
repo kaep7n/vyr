@@ -24,18 +24,14 @@ namespace Homematic.Skills.Tests
             var getDeviceListQuery = new GetDeviceListQuery(httpClient);
 
             var source = new BufferBlock<IMessage>();
+            var target = new ActionBlock<IMessage>(m => responseCount++);
 
-            var skill = new ReadDeviceList(source, getDeviceListQuery);
+            var skill = new ReadDeviceList(source, target, getDeviceListQuery);
             skill.Enable();
-
-            skill.Subscribe(r =>
-            {
-                responseCount++;
-            });
 
             await source.SendAsync(new ReadDeviceListRequest());
 
-            Thread.Sleep(2000);
+            Thread.Sleep(100);
 
             Assert.Equal(25, responseCount);
         }

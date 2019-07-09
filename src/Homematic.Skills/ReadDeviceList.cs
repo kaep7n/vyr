@@ -11,8 +11,8 @@ namespace Homematic.Skills
     {
         private readonly GetDeviceListQuery getDeviceListQuery;
 
-        public ReadDeviceList(ISourceBlock<IMessage> source, GetDeviceListQuery getDeviceListQuery)
-            : base(source)
+        public ReadDeviceList(ISourceBlock<IMessage> source, ITargetBlock<IMessage> target, GetDeviceListQuery getDeviceListQuery)
+            : base(source, target)
         {
             if (getDeviceListQuery is null)
             {

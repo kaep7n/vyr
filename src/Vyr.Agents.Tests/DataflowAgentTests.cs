@@ -27,7 +27,14 @@ namespace Vyr.Agents.Tests
         public void Run_should_enable_skills()
         {
             var source = new BufferBlock<IMessage>();
-            var skills = new[] { new DataflowSkillFake(source), new DataflowSkillFake(source), new DataflowSkillFake(source) };
+            var target = new BufferBlock<IMessage>();
+
+            var skills = new[] 
+            {
+                new DataflowSkillFake(source, target),
+                new DataflowSkillFake(source, target),
+                new DataflowSkillFake(source, target)
+            };
 
             var agent = new DataflowAgentFake(skills);
             agent.Run();
