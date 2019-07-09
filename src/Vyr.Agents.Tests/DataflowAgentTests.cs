@@ -1,4 +1,6 @@
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Vyr.Agents.Tests.Fakes;
 using Vyr.Core;
@@ -24,20 +26,9 @@ namespace Vyr.Agents.Tests
         [Fact]
         public void Run_should_enable_skills()
         {
-            var source = new BufferBlock<IMessage>();
-            var target = new BufferBlock<IMessage>();
-
-            var skill1 = new DataflowSkillFake();
-            skill1.SetSource(source);
-            skill1.SetTarget(target);
-
-            var skill2 = new DataflowSkillFake();
-            skill2.SetSource(source);
-            skill2.SetTarget(target);
-
-            var skill3 = new DataflowSkillFake();
-            skill3.SetSource(source);
-            skill3.SetTarget(target);
+            var skill1 = new DataflowSkillFake(i =>null, "Test1");
+            var skill2 = new DataflowSkillFake(i => null, "Test2");
+            var skill3 = new DataflowSkillFake(i => null, "Test3");
 
             var skills = new[] { skill1, skill2, skill3 };
 
@@ -45,6 +36,69 @@ namespace Vyr.Agents.Tests
             agent.Run();
 
             Assert.All(skills, s => Assert.True(s.IsEnabled));
+        }
+
+        [Fact]
+        public async Task Send_message_from_skill_should_send_response_message_to_skill()
+        {
+            var skill1 = new DataflowSkillFake(i => null);
+            var skill2 = new DataflowSkillFake(i => null, "Test1");
+
+            var skills = new[] { skill1, skill2};
+
+            var agent = new DataflowAgentFake(skills);
+            agent.Run();
+
+            await skill1.SendAsync(new FakeMessage("Test1"));
+
+            Thread.Sleep(50);
+
+            Assert.Equal(0, skill1.GetProcessedMessagesCount());
+            Assert.Equal(1, skill2.GetProcessedMessagesCount());
+        }
+
+        [Fact]
+        public async Task Send_message_from_skill_should_send_response_message_to_next_skill()
+        {
+            var skill1 = new DataflowSkillFake(i => null);
+            var skill2 = new DataflowSkillFake(i => new FakeMessage("Test2"), "Test1");
+            var skill3 = new DataflowSkillFake(i => null, "Test2");
+
+            var skills = new[] { skill1, skill2, skill3 };
+
+            var agent = new DataflowAgentFake(skills);
+            agent.Run();
+
+            await skill1.SendAsync(new FakeMessage("Test1"));
+
+            Thread.Sleep(50);
+
+            Assert.Equal(0, skill1.GetProcessedMessagesCount());
+            Assert.Equal(1, skill2.GetProcessedMessagesCount());
+            Assert.Equal(1, skill3.GetProcessedMessagesCount());
+        }
+
+        [Fact]
+        public async Task Send_message_from_skill_should_send_message_to_multiple_skills()
+        {
+            var skill1 = new DataflowSkillFake(i => null);
+            var skill2 = new DataflowSkillFake(i => null, "Test1");
+            var skill3 = new DataflowSkillFake(i => null, "Test1");
+            var skill4 = new DataflowSkillFake(i => null, "Test1");
+
+            var skills = new[] { skill1, skill2, skill3, skill4 };
+
+            var agent = new DataflowAgentFake(skills);
+            agent.Run();
+
+            await skill1.SendAsync(new FakeMessage("Test1"));
+
+            Thread.Sleep(1000);
+
+            Assert.Equal(0, skill1.GetProcessedMessagesCount());
+            Assert.Equal(1, skill2.GetProcessedMessagesCount());
+            Assert.Equal(1, skill3.GetProcessedMessagesCount());
+            Assert.Equal(1, skill4.GetProcessedMessagesCount());
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
@@ -29,17 +29,17 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
             skill.Enable();
 
-            await sourceBlock.SendAsync(new FakeMessage());
+            await sourceBlock.SendAsync(new FakeMessage("Test"));
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.True(skill.HasProcessedAnyRequests());
+            Assert.True(skill.HasProcessedAnyMessages());
         }
 
         [Fact]
@@ -48,13 +48,13 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
-            await sourceBlock.SendAsync(new FakeMessage());
+            await sourceBlock.SendAsync(new FakeMessage("Test"));
 
-            Assert.False(skill.HasProcessedAnyRequests());
+            Assert.False(skill.HasProcessedAnyMessages());
         }
 
         [Fact]
@@ -63,20 +63,20 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
-            await sourceBlock.SendAsync(new FakeMessage());
+            await sourceBlock.SendAsync(new FakeMessage("Test"));
 
-            Assert.False(skill.HasProcessedAnyRequests());
+            Assert.False(skill.HasProcessedAnyMessages());
 
             skill.Enable();
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.True(skill.HasProcessedAnyRequests());
+            Assert.True(skill.HasProcessedAnyMessages());
         }
 
         [Fact]
@@ -85,25 +85,25 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
             skill.Enable();
-            await sourceBlock.SendAsync(new FakeMessage());
+            await sourceBlock.SendAsync(new FakeMessage("Test"));
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.Equal(1, skill.GetProcessedRequestsCount());
+            Assert.Equal(1, skill.GetProcessedMessagesCount());
 
             skill.Disable();
-            await sourceBlock.SendAsync(new FakeMessage());
+            await sourceBlock.SendAsync(new FakeMessage("Test"));
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.Equal(1, skill.GetProcessedRequestsCount());
+            Assert.Equal(1, skill.GetProcessedMessagesCount());
         }
 
         [Fact]
@@ -112,19 +112,19 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
             skill.Enable();
             skill.Enable();
 
-            await sourceBlock.SendAsync(new FakeMessage());
+            await sourceBlock.SendAsync(new FakeMessage("Test"));
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
 
-            Assert.Equal(1, skill.GetProcessedRequestsCount());
+            Assert.Equal(1, skill.GetProcessedMessagesCount());
         }
 
         [Fact]
@@ -135,9 +135,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new ActionBlock<IMessage>(m => targetCount++);
 
-            var message = new FakeMessage();
+            var message = new FakeMessage("Test");
 
-            var skill = new DataflowSkillFake();
+            var skill = new DataflowSkillFake(i => new FakeMessage("Target"), "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
             skill.Enable();
@@ -156,7 +156,7 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkill();
+            var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 

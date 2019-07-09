@@ -5,10 +5,11 @@ namespace Vyr.Skills.Tests.Fakes
 {
     public class FakeMessage : IMessage
     {
-        public FakeMessage()
+        public FakeMessage(string topic)
         {
             this.Id = new Id();
-            this.Topic = "Test";
+            this.Topic = topic;
+            this.CreatedAt = DateTime.UtcNow;
         }
 
         public string Id { get; }
