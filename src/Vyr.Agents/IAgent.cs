@@ -9,8 +9,6 @@ namespace Vyr.Agents
 
         void Run();
 
-        Task EnqueueAsync(IMessage message);
-
         void Idle();
     }
 }

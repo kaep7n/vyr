@@ -26,7 +26,9 @@ namespace Homematic.Skills.Tests
             var source = new BufferBlock<IMessage>();
             var target = new ActionBlock<IMessage>(m => responseCount++);
 
-            var skill = new ReadDeviceList(source, target, getDeviceListQuery);
+            var skill = new ReadDeviceList(getDeviceListQuery);
+            skill.SetSource(source);
+            skill.SetTarget(target);
             skill.Enable();
 
             await source.SendAsync(new ReadDeviceListRequest());

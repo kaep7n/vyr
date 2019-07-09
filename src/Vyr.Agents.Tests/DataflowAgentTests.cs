@@ -29,49 +29,24 @@ namespace Vyr.Agents.Tests
             var source = new BufferBlock<IMessage>();
             var target = new BufferBlock<IMessage>();
 
-            var skills = new[] 
-            {
-                new DataflowSkillFake(source, target),
-                new DataflowSkillFake(source, target),
-                new DataflowSkillFake(source, target)
-            };
+            var skill1 = new DataflowSkillFake();
+            skill1.SetSource(source);
+            skill1.SetTarget(target);
+
+            var skill2 = new DataflowSkillFake();
+            skill2.SetSource(source);
+            skill2.SetTarget(target);
+
+            var skill3 = new DataflowSkillFake();
+            skill3.SetSource(source);
+            skill3.SetTarget(target);
+
+            var skills = new[]{ skill1, skill2, skill3 };
 
             var agent = new DataflowAgentFake(skills);
             agent.Run();
 
             Assert.All(skills, s => Assert.True(s.IsEnabled));
-        }
-
-        [Fact]
-        public async Task EnqueueAsync_should_process_message()
-        {
-            var agent = new DataflowAgentFake(Enumerable.Empty<ISkill>());
-            agent.Run();
-
-            await agent.EnqueueAsync(new Fakes.FakeMessage());
-
-            // wait for processing (there should be a prettier and reliable solution)
-            Thread.Sleep(10);
-
-            Assert.True(agent.HasProcessedAnyMessages());
-        }
-
-        [Fact]
-        public async Task EnqueueAsync_should_process_message_after_agent_is_idle()
-        {
-            var agent = new DataflowAgentFake(Enumerable.Empty<ISkill>());
-
-            agent.Run();
-            await agent.EnqueueAsync(new Fakes.FakeMessage());
-            Thread.Sleep(10);
-
-            agent.Idle();
-            await agent.EnqueueAsync(new Fakes.FakeMessage());
-
-            // wait for processing (there should be a prettier and reliable solution)
-            Thread.Sleep(10);
-
-            Assert.Equal(1, agent.GetProcessedMessagesCount());
         }
     }
 }

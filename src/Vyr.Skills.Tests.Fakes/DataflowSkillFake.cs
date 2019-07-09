@@ -11,8 +11,7 @@ namespace Vyr.Skills.Tests.Fakes
     {
         private readonly List<IMessage> processedRequests = new List<IMessage>();
 
-        public DataflowSkillFake(ISourceBlock<IMessage> source, ITargetBlock<IMessage> target) 
-            : base(source, target)
+        public DataflowSkillFake()
         {
         }
 

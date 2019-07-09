@@ -8,23 +8,21 @@ namespace Vyr.Skills
     public class DataflowSkill : ISkill
     {
 
-        private readonly BufferBlock<IMessage> incomingBlock = new BufferBlock<IMessage>();
+        private readonly BufferBlock<IMessage> incomingBuffer = new BufferBlock<IMessage>();
         private readonly ITargetBlock<IMessage> incomingTargetBlock;
 
-        private readonly BufferBlock<IMessage> outgoingBlock = new BufferBlock<IMessage>();
+        private readonly BufferBlock<IMessage> outgoingBuffer = new BufferBlock<IMessage>();
 
-        private readonly ISourceBlock<IMessage> sourceBlock;
-        private readonly ITargetBlock<IMessage> targetBlock;
+        private ISourceBlock<IMessage> sourceBlock;
+        private ITargetBlock<IMessage> targetBlock;
 
         private IDisposable sourceBlockLink;
         private IDisposable targetBlockLink;
         private IDisposable incomingBlockLink;
 
-        public DataflowSkill(ISourceBlock<IMessage> source, ITargetBlock<IMessage> target)
+        public DataflowSkill()
         {
             this.incomingTargetBlock = new ActionBlock<IMessage>(this.ProcessAsync);
-            this.sourceBlock = source;
-            this.targetBlock = target;
         }
 
         public bool IsEnabled { get; private set; }
@@ -33,9 +31,9 @@ namespace Vyr.Skills
 
         public void Enable()
         {
-            this.sourceBlockLink = this.sourceBlock.LinkTo(this.incomingBlock);
-            this.targetBlockLink = this.outgoingBlock.LinkTo(this.targetBlock);
-            this.incomingBlockLink = this.incomingBlock.LinkTo(this.incomingTargetBlock);
+            this.sourceBlockLink = this.sourceBlock.LinkTo(this.incomingBuffer);
+            this.targetBlockLink = this.outgoingBuffer.LinkTo(this.targetBlock);
+            this.incomingBlockLink = this.incomingBuffer.LinkTo(this.incomingTargetBlock);
 
             this.IsEnabled = true;
         }
@@ -54,6 +52,26 @@ namespace Vyr.Skills
             this.IsEnabled = false;
         }
 
+        public void SetSource(ISourceBlock<IMessage> sourceBlock)
+        {
+            if (this.IsEnabled)
+            {
+                throw new InvalidOperationException("Source can only be set then skill is not enabled");
+            }
+
+            this.sourceBlock = sourceBlock;
+        }
+
+        public void SetTarget(ITargetBlock<IMessage> targetBlock)
+        {
+            if (this.IsEnabled)
+            {
+                throw new InvalidOperationException("Target can only be set then skill is not enabled");
+            }
+
+            this.targetBlock = targetBlock;
+        }
+
         protected async Task PublishAsync(IMessage message)
         {
             if (message is null)
@@ -61,7 +79,7 @@ namespace Vyr.Skills
                 throw new ArgumentNullException(nameof(message));
             }
 
-            await this.outgoingBlock.SendAsync(message);
+            await this.outgoingBuffer.SendAsync(message);
         }
 
         protected virtual Task ProcessAsync(IMessage message)

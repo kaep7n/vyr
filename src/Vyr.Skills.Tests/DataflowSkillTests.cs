@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
@@ -16,7 +15,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake(sourceBlock, targetBlock);
+            var skill = new DataflowSkillFake();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
 
             skill.Enable();
             Assert.True(skill.IsEnabled);
@@ -28,7 +29,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake(sourceBlock, targetBlock);
+            var skill = new DataflowSkillFake();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
             skill.Enable();
 
             await sourceBlock.SendAsync(new FakeMessage());
@@ -45,7 +48,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake(sourceBlock, targetBlock);
+            var skill = new DataflowSkillFake();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
 
             await sourceBlock.SendAsync(new FakeMessage());
 
@@ -58,7 +63,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake(sourceBlock, targetBlock);
+            var skill = new DataflowSkillFake();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
 
             await sourceBlock.SendAsync(new FakeMessage());
 
@@ -78,7 +85,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake(sourceBlock, targetBlock);
+            var skill = new DataflowSkillFake();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
 
             skill.Enable();
             await sourceBlock.SendAsync(new FakeMessage());
@@ -103,7 +112,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkillFake(sourceBlock, targetBlock);
+            var skill = new DataflowSkillFake();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
 
             skill.Enable();
             skill.Enable();
@@ -126,7 +137,9 @@ namespace Vyr.Skills.Tests
 
             var message = new FakeMessage();
 
-            var skill = new DataflowSkillFake(sourceBlock, targetBlock);
+            var skill = new DataflowSkillFake();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
             skill.Enable();
 
             await sourceBlock.SendAsync(message);
@@ -143,7 +156,9 @@ namespace Vyr.Skills.Tests
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
 
-            var skill = new DataflowSkill(sourceBlock, targetBlock);
+            var skill = new DataflowSkill();
+            skill.SetSource(sourceBlock);
+            skill.SetTarget(targetBlock);
 
             skill.Enable();
             Assert.True(skill.IsEnabled);

@@ -40,16 +40,6 @@ namespace Vyr.Agents
             this.IsRunning = true;
         }
 
-        public async Task EnqueueAsync(IMessage message)
-        {
-            if (message is null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
-
-            await this.incomingBlock.SendAsync(message);
-        }
-
         protected virtual void ProcessMessage(IMessage message)
         {
         }
