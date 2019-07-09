@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Vyr.Core;
@@ -7,7 +9,6 @@ namespace Vyr.Skills
 {
     public class DataflowSkill : ISkill
     {
-
         private readonly BufferBlock<IMessage> incomingBuffer = new BufferBlock<IMessage>();
         private readonly ITargetBlock<IMessage> incomingTargetBlock;
 
@@ -27,11 +28,11 @@ namespace Vyr.Skills
 
         public bool IsEnabled { get; private set; }
 
-        public string[] AcceptedTopics { get; private set; }
+        public IEnumerable<string> Topics => this.GetTopics();
 
         public void Enable()
         {
-            this.sourceBlockLink = this.sourceBlock.LinkTo(this.incomingBuffer);
+            this.sourceBlockLink = this.sourceBlock.LinkTo(this.incomingBuffer, m => this.Topics.Contains(m.Topic));
             this.targetBlockLink = this.outgoingBuffer.LinkTo(this.targetBlock);
             this.incomingBlockLink = this.incomingBuffer.LinkTo(this.incomingTargetBlock);
 
@@ -85,6 +86,11 @@ namespace Vyr.Skills
         protected virtual Task ProcessAsync(IMessage message)
         {
             return Task.CompletedTask;
+        }
+
+        protected virtual IEnumerable<string> GetTopics()
+        {
+            return Enumerable.Empty<string>();
         }
     }
 }

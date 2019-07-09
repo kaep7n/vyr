@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
-using Vyr.Core;
+﻿using System.Collections.Generic;
 
 namespace Vyr.Skills
 {
@@ -9,7 +6,7 @@ namespace Vyr.Skills
     {
         bool IsEnabled { get; }
 
-        string[] AcceptedTopics { get; }
+        IEnumerable<string> Topics { get; }
 
         void Enable();
 

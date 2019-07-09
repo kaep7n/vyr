@@ -8,6 +8,7 @@ namespace Vyr.Skills.Tests.Fakes
         public FakeMessage()
         {
             this.Id = new Id();
+            this.Topic = "Test";
         }
 
         public string Id { get; }

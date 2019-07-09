@@ -1,5 +1,6 @@
 ﻿using Homematic.Api.Xml;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Vyr.Core;
 using Vyr.Skills;
@@ -22,7 +23,7 @@ namespace Homematic.Skills
 
         protected override async Task ProcessAsync(IMessage message)
         {
-            if (!(message is ReadDeviceListRequest))
+            if (!(message is ReadDeviceListMessage))
             {
                 return;
             }
@@ -31,8 +32,13 @@ namespace Homematic.Skills
 
             foreach (var device in deviceList.Devices)
             {
-                await this.PublishAsync(new ReadDeviceListResponse(device));
+                await this.PublishAsync(new DeviceStructureMessage(device));
             }
+        }
+
+        protected override IEnumerable<string> GetTopics()
+        {
+            return new[] { "ReadDeviceList" };
         }
     }
 }

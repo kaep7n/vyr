@@ -25,6 +25,11 @@ namespace Vyr.Skills.Tests.Fakes
             return this.processedRequests.Count;
         }
 
+        protected override IEnumerable<string> GetTopics()
+        {
+            return new[] { "Test" };
+        }
+
         protected override async Task ProcessAsync(IMessage message)
         {
             if (message is null)

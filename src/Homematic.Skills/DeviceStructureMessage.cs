@@ -4,9 +4,9 @@ using Vyr.Core;
 
 namespace Homematic.Skills
 {
-    public class ReadDeviceListResponse : IMessage
+    public class DeviceStructureMessage : IMessage
     {
-        public ReadDeviceListResponse(Device device)
+        public DeviceStructureMessage(Device device)
         {
             if (device is null)
             {
@@ -14,6 +14,7 @@ namespace Homematic.Skills
             }
 
             this.Id = new Id();
+            this.Topic = "DeviceInfo";
             this.Device = device;
         }
 

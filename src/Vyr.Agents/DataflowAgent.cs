@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Vyr.Core;
 using Vyr.Skills;
@@ -11,10 +10,7 @@ namespace Vyr.Agents
     {
         private readonly IEnumerable<ISkill> skills;
 
-        private readonly BufferBlock<IMessage> incomingBlock = new BufferBlock<IMessage>();
-        private readonly ActionBlock<IMessage> incomingTargetBlock;
-
-        private IDisposable incomingBlockLink;
+        private readonly BroadcastBlock<IMessage> skillSourceBlock = new BroadcastBlock<IMessage>(null);
 
         public DataflowAgent(IEnumerable<ISkill> skills)
         {
@@ -24,7 +20,6 @@ namespace Vyr.Agents
             }
 
             this.skills = skills;
-            this.incomingTargetBlock = new ActionBlock<IMessage>(this.ProcessMessage);
         }
 
         public bool IsRunning { get; private set; }
@@ -33,21 +28,24 @@ namespace Vyr.Agents
         {
             foreach (var skill in this.skills)
             {
+                if (skill is DataflowSkill dataflowSkill)
+                {
+                    dataflowSkill.SetSource(this.skillSourceBlock);
+                    dataflowSkill.SetTarget(this.skillSourceBlock);
+                }
+
                 skill.Enable();
             }
 
-            this.incomingBlockLink = this.incomingBlock.LinkTo(this.incomingTargetBlock);
             this.IsRunning = true;
+        }
+        public void Idle()
+        {
+            this.IsRunning = false;
         }
 
         protected virtual void ProcessMessage(IMessage message)
         {
-        }
-
-        public void Idle()
-        {
-            this.incomingBlockLink.Dispose();
-            this.IsRunning = false;
         }
     }
 }

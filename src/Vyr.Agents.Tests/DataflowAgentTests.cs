@@ -1,6 +1,4 @@
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Vyr.Agents.Tests.Fakes;
 using Vyr.Core;
@@ -41,7 +39,7 @@ namespace Vyr.Agents.Tests
             skill3.SetSource(source);
             skill3.SetTarget(target);
 
-            var skills = new[]{ skill1, skill2, skill3 };
+            var skills = new[] { skill1, skill2, skill3 };
 
             var agent = new DataflowAgentFake(skills);
             agent.Run();

@@ -3,11 +3,12 @@ using Vyr.Core;
 
 namespace Homematic.Skills
 {
-    public class ReadDeviceListRequest : IMessage
+    public class ReadDeviceListMessage : IMessage
     {
-        public ReadDeviceListRequest()
+        public ReadDeviceListMessage()
         {
             this.Id = new Id();
+            this.Topic = "ReadDeviceList";
             this.CreatedAt = DateTime.UtcNow;
         }
 
