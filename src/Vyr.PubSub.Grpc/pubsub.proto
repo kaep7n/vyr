@@ -2,17 +2,17 @@ syntax = "proto3";
 
 import "google/protobuf/any.proto";
 
-package publishAndSubcribe;
+package pubSub;
 
-service PubSub {
+service Broker {
 
   rpc Subscribe(Subscription) returns (Subscription) {}
 
-  rpc Attach(Subscription) returns (stream Event) {}
+  rpc Attach(Subscription) returns (stream Message) {}
 
   rpc Unsubscribe(Subscription) returns (Subscription) {}
 
-  rpc Publish(Event) returns (Event) {}
+  rpc Publish(Message) returns (Message) {}
 }
 
 message Subscription {
@@ -20,12 +20,7 @@ message Subscription {
 	repeated string topics = 2;
 }
 
-message Event {
+message Message {
 	string topic = 1;
     google.protobuf.Any content = 2;
-}
-
-message ConfigChanged {
-	string id = 1;
-	string type = 2;
 }

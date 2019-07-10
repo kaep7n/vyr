@@ -1,9 +1,7 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using PublishAndSubcribe;
+﻿using PubSub;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using static PublishAndSubcribe.PubSub;
 
 namespace Vyr.Playground.Grpc
 {
@@ -11,10 +9,10 @@ namespace Vyr.Playground.Grpc
     {
         public class Subscriber
         {
-            private readonly PubSubClient pubSubClient;
+            private readonly Broker.BrokerClient pubSubClient;
             private Subscription subscription;
 
-            public Subscriber(PubSubClient pubSubClient)
+            public Subscriber(Broker.BrokerClient pubSubClient)
             {
                 this.pubSubClient = pubSubClient;
             }
@@ -43,11 +41,7 @@ namespace Vyr.Playground.Grpc
 
             public void Publish(string topic)
             {
-                var configChanged = new ConfigChanged();
-                configChanged.Id = Guid.NewGuid().ToString();
-                configChanged.Type = "change";
-
-                this.pubSubClient.Publish(new Event { Topic = topic, Content = Any.Pack(configChanged) });
+                //this.pubSubClient.Publish(new Message { Topic = topic, Content = Any.Pack(configChanged) });
             }
 
             public async Task AttachAsync()
@@ -55,8 +49,6 @@ namespace Vyr.Playground.Grpc
                 using var call = this.pubSubClient.Attach(this.subscription);
 
                 var responseStream = call.ResponseStream;
-
-                Console.WriteLine("Receiving Messages");
 
                 while (await responseStream.MoveNext())
                 {
