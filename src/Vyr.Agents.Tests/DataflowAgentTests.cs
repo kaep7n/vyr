@@ -26,7 +26,7 @@ namespace Vyr.Agents.Tests
         [Fact]
         public void Run_should_enable_skills()
         {
-            var skill1 = new DataflowSkillFake(i =>null, "Test1");
+            var skill1 = new DataflowSkillFake(i => null, "Test1");
             var skill2 = new DataflowSkillFake(i => null, "Test2");
             var skill3 = new DataflowSkillFake(i => null, "Test3");
 
@@ -93,7 +93,7 @@ namespace Vyr.Agents.Tests
 
             await skill1.SendAsync(new FakeMessage("Test1"));
 
-            Thread.Sleep(1000);
+            Thread.Sleep(50);
 
             Assert.Equal(0, skill1.GetProcessedMessagesCount());
             Assert.Equal(1, skill2.GetProcessedMessagesCount());

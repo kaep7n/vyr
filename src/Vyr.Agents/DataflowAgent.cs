@@ -10,7 +10,7 @@ namespace Vyr.Agents
     {
         private readonly IEnumerable<ISkill> skills;
 
-        private readonly BroadcastBlock<IMessage> skillSourceBlock = new BroadcastBlock<IMessage>(null);
+        private readonly BroadcastBlock<IMessage> bus = new BroadcastBlock<IMessage>(null);
 
         public DataflowAgent(IEnumerable<ISkill> skills)
         {
@@ -30,8 +30,8 @@ namespace Vyr.Agents
             {
                 if (skill is DataflowSkill dataflowSkill)
                 {
-                    dataflowSkill.SetSource(this.skillSourceBlock);
-                    dataflowSkill.SetTarget(this.skillSourceBlock);
+                    dataflowSkill.SetSource(this.bus);
+                    dataflowSkill.SetTarget(this.bus);
                 }
 
                 skill.Enable();
