@@ -14,8 +14,7 @@ namespace Vyr.Playground
             var isolationStrategy = new ContextIsolationStrategy(Directory.GetCurrentDirectory());
             var agents = new AgentDescription[]
             {
-                new AgentDescription("Vyr.Playground.Agents", "Vyr.Playground.Agents.Mulder"),
-                new AgentDescription("Vyr.Playground.Agents", "Vyr.Playground.Agents.Skully")
+                new AgentDescription("Vyr.Playground.Agents", "Vyr.Playground.Agents.CoreAgent")
             };
 
             WriteContexts();

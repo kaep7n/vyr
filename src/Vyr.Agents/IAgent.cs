@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Vyr.Core;
 
 namespace Vyr.Agents
 {
@@ -7,8 +6,8 @@ namespace Vyr.Agents
     {
         bool IsRunning { get; }
 
-        void Run();
+        Task RunAsync();
 
-        void Idle();
+        Task IdleAsync();
     }
 }

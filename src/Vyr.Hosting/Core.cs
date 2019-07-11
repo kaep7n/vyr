@@ -31,7 +31,7 @@ namespace Vyr.Hosting
 
                 var agent = isolation.Isolate(agentDescription);
 
-                var runMethod = agent.GetType().GetMethod("Run");
+                var runMethod = agent.GetType().GetMethod("RunAsync");
                 runMethod.Invoke(agent, new object[] { });
 
                 this.agents.Add(agent);

@@ -16,10 +16,10 @@ namespace Vyr.Agents.Tests
         public void Run_and_Idle_should_set_IsRunning()
         {
             var agent = new DataflowAgentFake(Enumerable.Empty<ISkill>());
-            agent.Run();
+            agent.RunAsync();
             Assert.True(agent.IsRunning);
 
-            agent.Idle();
+            agent.IdleAsync();
             Assert.False(agent.IsRunning);
         }
 
@@ -33,7 +33,7 @@ namespace Vyr.Agents.Tests
             var skills = new[] { skill1, skill2, skill3 };
 
             var agent = new DataflowAgentFake(skills);
-            agent.Run();
+            agent.RunAsync();
 
             Assert.All(skills, s => Assert.True(s.IsEnabled));
         }
@@ -47,7 +47,7 @@ namespace Vyr.Agents.Tests
             var skills = new[] { skill1, skill2};
 
             var agent = new DataflowAgentFake(skills);
-            agent.Run();
+            agent.RunAsync();
 
             await skill1.SendAsync(new FakeMessage("Test1"));
 
@@ -67,7 +67,7 @@ namespace Vyr.Agents.Tests
             var skills = new[] { skill1, skill2, skill3 };
 
             var agent = new DataflowAgentFake(skills);
-            agent.Run();
+            agent.RunAsync();
 
             await skill1.SendAsync(new FakeMessage("Test1"));
 
@@ -89,7 +89,7 @@ namespace Vyr.Agents.Tests
             var skills = new[] { skill1, skill2, skill3, skill4 };
 
             var agent = new DataflowAgentFake(skills);
-            agent.Run();
+            agent.RunAsync();
 
             await skill1.SendAsync(new FakeMessage("Test1"));
 

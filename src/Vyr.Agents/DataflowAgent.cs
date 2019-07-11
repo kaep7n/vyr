@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Vyr.Core;
 using Vyr.Skills;
@@ -24,7 +25,7 @@ namespace Vyr.Agents
 
         public bool IsRunning { get; private set; }
 
-        public void Run()
+        public virtual async Task RunAsync()
         {
             foreach (var skill in this.skills)
             {
@@ -34,14 +35,19 @@ namespace Vyr.Agents
                     dataflowSkill.SetTarget(this.bus);
                 }
 
-                skill.EnableAsync();
+                await skill.EnableAsync();
             }
 
             this.IsRunning = true;
         }
-        public void Idle()
+        public virtual async Task IdleAsync()
         {
             this.IsRunning = false;
+
+            foreach (var skill in this.skills)
+            {
+                await skill.DisableAsync();
+            }
         }
 
         protected virtual void ProcessMessage(IMessage message)
