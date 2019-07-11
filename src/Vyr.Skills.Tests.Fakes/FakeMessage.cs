@@ -9,13 +9,13 @@ namespace Vyr.Skills.Tests.Fakes
         {
             this.Id = new Id();
             this.Topic = topic;
-            this.CreatedAt = DateTime.UtcNow;
+            this.CreatedAtUtc = DateTime.UtcNow;
         }
 
         public string Id { get; }
 
         public string Topic { get; }
 
-        public DateTime CreatedAt { get; }
+        public DateTime CreatedAtUtc { get; }
     }
 }

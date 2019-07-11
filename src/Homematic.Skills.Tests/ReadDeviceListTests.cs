@@ -29,7 +29,8 @@ namespace Homematic.Skills.Tests
             var skill = new ReadDeviceList(getDeviceListQuery);
             skill.SetSource(source);
             skill.SetTarget(target);
-            skill.Enable();
+
+            await skill.EnableAsync();
 
             await source.SendAsync(new ReadDeviceListMessage());
 

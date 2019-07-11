@@ -1,65 +1,81 @@
-﻿using PubSub;
+﻿using Google.Protobuf;
+using Google.Protobuf.WellKnownTypes;
+using PubSub;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Vyr.Core;
+using Vyr.Skills;
+using static PubSub.BrokerService;
 
 namespace Vyr.Playground.Grpc
 {
-    partial class Program
+    public class Subscriber : DataflowSkill
     {
-        public class Subscriber
+        private readonly BrokerServiceClient pubSubClient;
+        private Subscription subscription;
+
+        public Subscriber(BrokerServiceClient pubSubClient)
         {
-            private readonly Broker.BrokerClient pubSubClient;
-            private Subscription subscription;
-
-            public Subscriber(Broker.BrokerClient pubSubClient)
+            if (pubSubClient is null)
             {
-                this.pubSubClient = pubSubClient;
+                throw new ArgumentNullException(nameof(pubSubClient));
             }
 
-            public event EventHandler<EventArgs> MessageReceived;
+            this.pubSubClient = pubSubClient;
+        }
 
-            private void OnMessageReceived()
+        public override async Task EnableAsync()
+        {
+            await base.EnableAsync();
+            await this.SubscribeAsync();
+            await this.AttachAsync();
+        }
+
+        public override async Task DisableAsync()
+        {
+            await this.UnsubscribeAsync();
+            await base.DisableAsync();
+        }
+
+        protected override async Task ProcessAsync(Core.IMessage message)
+        {
+            var grpcMessage = new Message();
+            grpcMessage.Topic = message.Topic;
+            grpcMessage.CreatedAtUtc = Timestamp.FromDateTime(message.CreatedAtUtc);
+
+            await this.pubSubClient.PublishAsync(grpcMessage);
+        }
+
+        private async Task SubscribeAsync(params string[] topics)
+        {
+            this.subscription = new Subscription
             {
-                this.MessageReceived?.Invoke(this, new EventArgs());
+                ClientId = new Id()
+            };
+
+            foreach (var topic in topics)
+            {
+                this.subscription.Topics.Add(topic);
             }
 
-            public void Subscribe(params string[] topics)
+            await this.pubSubClient.SubscribeAsync(this.subscription);
+        }
+
+        private async Task UnsubscribeAsync()
+        {
+            await this.pubSubClient.UnsubscribeAsync(this.subscription);
+        }
+
+        private async Task AttachAsync()
+        {
+            using var call = this.pubSubClient.Attach(this.subscription);
+
+            var responseStream = call.ResponseStream;
+
+            while (await responseStream.MoveNext())
             {
-                this.subscription = new Subscription
-                {
-                    ClientId = Guid.NewGuid().ToString()
-                };
-
-                foreach (var topic in topics)
-                {
-                    this.subscription.Topics.Add(topic);
-                }
-
-                this.pubSubClient.Subscribe(this.subscription);
-            }
-
-            public void Publish(string topic)
-            {
-                //this.pubSubClient.Publish(new Message { Topic = topic, Content = Any.Pack(configChanged) });
-            }
-
-            public async Task AttachAsync()
-            {
-                using var call = this.pubSubClient.Attach(this.subscription);
-
-                var responseStream = call.ResponseStream;
-
-                while (await responseStream.MoveNext())
-                {
-                    var @event = responseStream.Current;
-                    this.OnMessageReceived();
-                }
-            }
-
-            public void Unsubscribe()
-            {
-                this.pubSubClient.Unsubscribe(this.subscription);
+                var grpcMessage = responseStream.Current;
             }
         }
     }

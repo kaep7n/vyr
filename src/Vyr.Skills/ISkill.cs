@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Vyr.Skills
 {
@@ -8,8 +9,8 @@ namespace Vyr.Skills
 
         IEnumerable<string> Topics { get; }
 
-        void Enable();
+        Task EnableAsync();
 
-        void Disable();
+        Task DisableAsync();
     }
 }

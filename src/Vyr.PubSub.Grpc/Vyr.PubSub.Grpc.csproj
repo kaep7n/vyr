@@ -18,6 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Vyr.Skills\Vyr.Skills.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Protobuf Include="pubsub.proto" />
   </ItemGroup>
 

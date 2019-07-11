@@ -13,7 +13,7 @@ namespace Vyr.Skills.Tests.Fakes
             }
 
             this.Id = new Id();
-            this.CreatedAt = DateTime.UtcNow;
+            this.CreatedAtUtc = DateTime.UtcNow;
             this.SourceMessage = sourceMessage;
         }
 
@@ -21,7 +21,7 @@ namespace Vyr.Skills.Tests.Fakes
 
         public string Topic { get; }
 
-        public DateTime CreatedAt { get; }
+        public DateTime CreatedAtUtc { get; }
 
         public IMessage SourceMessage { get; }
     }

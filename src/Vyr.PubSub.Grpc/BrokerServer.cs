@@ -3,10 +3,11 @@ using PubSub;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using static PubSub.BrokerService;
 
 namespace Vyr.Playground.Grpc
 {
-    public class BrokerServer : Broker.BrokerBase
+    public class BrokerServer : BrokerServiceBase
     {
         private readonly BufferBlock<Message> buffer = new BufferBlock<Message>();
 

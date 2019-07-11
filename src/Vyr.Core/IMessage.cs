@@ -8,6 +8,6 @@ namespace Vyr.Core
 
         string Topic { get; }
 
-        DateTime CreatedAt { get; }
+        DateTime CreatedAtUtc { get; }
     }
 }

@@ -30,16 +30,18 @@ namespace Vyr.Skills
 
         public IEnumerable<string> Topics => this.GetTopics();
 
-        public void Enable()
+        public virtual Task EnableAsync()
         {
             this.sourceBlockLink = this.sourceBlock.LinkTo(this.incomingBuffer, m => this.Topics.Contains(m.Topic));
             this.targetBlockLink = this.outgoingBuffer.LinkTo(this.targetBlock);
             this.incomingBlockLink = this.incomingBuffer.LinkTo(this.incomingTargetBlock);
 
             this.IsEnabled = true;
+
+            return Task.CompletedTask;
         }
 
-        public void Disable()
+        public virtual Task DisableAsync()
         {
             this.sourceBlockLink.Dispose();
             this.sourceBlockLink = null;
@@ -51,6 +53,8 @@ namespace Vyr.Skills
             this.targetBlockLink = null;
 
             this.IsEnabled = false;
+
+            return Task.CompletedTask;
         }
 
         public void SetSource(ISourceBlock<IMessage> sourceBlock)

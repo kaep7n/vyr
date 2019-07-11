@@ -10,7 +10,7 @@ namespace Vyr.Skills.Tests
     public partial class DataflowSkillTests
     {
         [Fact]
-        public void Enable_should_set_IsEnabled_to_true()
+        public async Task EnableAsync_should_set_IsEnabled_to_true()
         {
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
@@ -19,7 +19,7 @@ namespace Vyr.Skills.Tests
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
-            skill.Enable();
+            await skill.EnableAsync();
             Assert.True(skill.IsEnabled);
         }
 
@@ -32,7 +32,8 @@ namespace Vyr.Skills.Tests
             var skill = new DataflowSkillFake(i => null, "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
-            skill.Enable();
+
+            await skill.EnableAsync();
 
             await sourceBlock.SendAsync(new FakeMessage("Test"));
 
@@ -71,7 +72,7 @@ namespace Vyr.Skills.Tests
 
             Assert.False(skill.HasProcessedAnyMessages());
 
-            skill.Enable();
+            await skill.EnableAsync();
 
             // wait for processing (there should be a prettier and reliable solution)
             Thread.Sleep(10);
@@ -89,7 +90,7 @@ namespace Vyr.Skills.Tests
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
-            skill.Enable();
+            await skill.EnableAsync();
             await sourceBlock.SendAsync(new FakeMessage("Test"));
 
             // wait for processing (there should be a prettier and reliable solution)
@@ -97,7 +98,7 @@ namespace Vyr.Skills.Tests
 
             Assert.Equal(1, skill.GetProcessedMessagesCount());
 
-            skill.Disable();
+            await skill.DisableAsync();
             await sourceBlock.SendAsync(new FakeMessage("Test"));
 
             // wait for processing (there should be a prettier and reliable solution)
@@ -116,8 +117,8 @@ namespace Vyr.Skills.Tests
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
-            skill.Enable();
-            skill.Enable();
+            await skill.EnableAsync();
+            await skill.EnableAsync();
 
             await sourceBlock.SendAsync(new FakeMessage("Test"));
 
@@ -140,7 +141,8 @@ namespace Vyr.Skills.Tests
             var skill = new DataflowSkillFake(i => new FakeMessage("Target"), "Test");
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
-            skill.Enable();
+
+            await skill.EnableAsync();
 
             await sourceBlock.SendAsync(message);
 
@@ -151,7 +153,7 @@ namespace Vyr.Skills.Tests
         }
 
         [Fact]
-        public void Disable_should_set_IsEnabled_to_false()
+        public async Task Disable_should_set_IsEnabled_to_false()
         {
             var sourceBlock = new BufferBlock<IMessage>();
             var targetBlock = new BufferBlock<IMessage>();
@@ -160,10 +162,10 @@ namespace Vyr.Skills.Tests
             skill.SetSource(sourceBlock);
             skill.SetTarget(targetBlock);
 
-            skill.Enable();
+            await skill.EnableAsync();
             Assert.True(skill.IsEnabled);
 
-            skill.Disable();
+            await skill.DisableAsync();
             Assert.False(skill.IsEnabled);
         }
     }

@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
 
 package pubSub;
 
-service Broker {
+service BrokerService {
 
   rpc Subscribe(Subscription) returns (Subscription) {}
 
@@ -22,5 +22,6 @@ message Subscription {
 
 message Message {
 	string topic = 1;
-    google.protobuf.Any content = 2;
+    bytes content = 2;
+	google.protobuf.Timestamp createdAtUtc = 3;
 }

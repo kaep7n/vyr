@@ -34,7 +34,7 @@ namespace Vyr.Agents
                     dataflowSkill.SetTarget(this.bus);
                 }
 
-                skill.Enable();
+                skill.EnableAsync();
             }
 
             this.IsRunning = true;

@@ -22,7 +22,7 @@ namespace Homematic.Skills
 
         public string Topic { get; }
 
-        public DateTime CreatedAt { get; }
+        public DateTime CreatedAtUtc { get; }
 
         public Device Device { get; }
     }
