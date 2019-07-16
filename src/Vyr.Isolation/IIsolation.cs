@@ -6,10 +6,6 @@ namespace Vyr.Isolation
     {
         Task IsolateAsync(IsolationConfiguration isolationConfiguration);
 
-        Task RunAsync();
-
-        Task IdleAsync();
-
         Task FreeAsync();
     }
 }
