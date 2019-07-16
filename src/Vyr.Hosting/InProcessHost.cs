@@ -1,4 +1,5 @@
-﻿using Vyr.Isolation;
+﻿using System.Threading.Tasks;
+using Vyr.Isolation;
 
 namespace Vyr.Hosting
 {
@@ -6,19 +7,19 @@ namespace Vyr.Hosting
     {
         private readonly Core core;
 
-        public InProcessHost(IIsolationStrategy isolationStrategy, AgentDescription[] agentDescriptions)
+        public InProcessHost(IIsolationStrategy isolationStrategy, IsolationConfiguration[] isolationConfigurations)
         {
-            this.core = new Core(isolationStrategy, agentDescriptions);
+            this.core = new Core(isolationStrategy, isolationConfigurations);
         }
 
-        public void Up()
+        public async Task UpAsync()
         {
-            this.core.Start();
+            await this.core.StartAsync();
         }
 
-        public void Down()
+        public async Task DownAsync()
         {
-            this.core.Stop();
+            await this.core.StopAsync();
         }
     }
 }

@@ -1,9 +1,15 @@
-﻿namespace Vyr.Isolation
+﻿using System.Threading.Tasks;
+
+namespace Vyr.Isolation
 {
     public interface IIsolation
     {
-        object Isolate(AgentDescription agentDescription);
+        Task IsolateAsync(IsolationConfiguration isolationConfiguration);
 
-        void Free();
+        Task RunAsync();
+
+        Task IdleAsync();
+
+        Task FreeAsync();
     }
 }

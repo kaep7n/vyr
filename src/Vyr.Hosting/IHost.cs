@@ -1,9 +1,11 @@
-﻿namespace Vyr.Hosting
+﻿using System.Threading.Tasks;
+
+namespace Vyr.Hosting
 {
     public interface IHost
     {
-        void Up();
+        Task UpAsync();
 
-        void Down();
+        Task DownAsync();
     }
 }
