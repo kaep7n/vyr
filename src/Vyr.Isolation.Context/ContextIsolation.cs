@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -28,9 +29,10 @@ namespace Vyr.Isolation.Context
             var controllerAssembly = loadContext.LoadFromAssemblyName(controllerType.Assembly.GetName());
             var controllerType1 = controllerAssembly.GetType(controllerType.FullName);
 
+            var config = JsonConvert.SerializeObject(isolationConfiguration.AgentConfiguration);
             var contoller = Activator.CreateInstance(controllerType1,
                 loadContext,
-                null);
+                config);
 
             return Task.CompletedTask;
         }

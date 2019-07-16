@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System.Reflection;
 using System.Runtime.Loader;
 using Vyr.Agents;
@@ -12,10 +13,10 @@ namespace Vyr.Isolation.Context
         private readonly AgentConfiguration agentConfiguration;
         private readonly IAgent agent;
 
-        public IsolationController(AssemblyLoadContext context, AgentConfiguration agentConfiguration)
+        public IsolationController(AssemblyLoadContext context, string config)
         {
             this.context = context;
-            this.agentConfiguration = agentConfiguration;
+            this.agentConfiguration = JsonConvert.DeserializeObject<AgentConfiguration>(config);
 
             var serviceCollection = new ServiceCollection();
 
