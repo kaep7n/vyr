@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Runtime.Loader;
 using System.Threading.Tasks;
 using Vyr.Hosting;
-using Vyr.Isolation;
 using Vyr.Isolation.Context;
 
 namespace Vyr.Playground
@@ -13,27 +13,11 @@ namespace Vyr.Playground
         static async Task Main(string[] args)
         {
             var isolationStrategy = new ContextIsolationStrategy(Directory.GetCurrentDirectory());
-            var isolationConfigurations = new IsolationConfiguration[]
-            {
-                new IsolationConfiguration(
-                    new AgentConfiguration(
-                        "Vyr.Playground.Agents",
-                        "Vyr.Playground.Agents.CoreAgent",
-                         new SkillConfiguration[] {
-                             new SkillConfiguration(
-                                 "Vyr.Playground.Agents",
-                                 "Vyr.Playground.Agents.TestSkill1"),
-                             new SkillConfiguration(
-                                 "Vyr.Playground.Agents",
-                                 "Vyr.Playground.Agents.TestSkill2")
-                            })
-                         )
-            };
 
             WriteContexts();
 
             Console.WriteLine("creating host");
-            var host = new InProcessHost(isolationStrategy, isolationConfigurations);
+            var host = new InProcessHost(isolationStrategy);
             Console.WriteLine("created host");
 
             Console.WriteLine("starting host");

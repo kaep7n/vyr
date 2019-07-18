@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 using Vyr.Isolation;
 
 namespace Vyr.Hosting
@@ -7,9 +8,9 @@ namespace Vyr.Hosting
     {
         private readonly Core core;
 
-        public InProcessHost(IIsolationStrategy isolationStrategy, IsolationConfiguration[] isolationConfigurations)
+        public InProcessHost(IIsolationStrategy isolationStrategy)
         {
-            this.core = new Core(isolationStrategy, isolationConfigurations);
+            this.core = new Core(isolationStrategy);
         }
 
         public async Task UpAsync()

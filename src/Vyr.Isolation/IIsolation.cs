@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
 
 namespace Vyr.Isolation
 {
     public interface IIsolation
     {
-        Task IsolateAsync(IsolationConfiguration isolationConfiguration);
+        Task IsolateAsync();
 
         Task FreeAsync();
     }

@@ -1,9 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Reflection;
 using System.Threading.Tasks;
-using Vyr.Skills;
 
 namespace Vyr.Isolation.Context
 {
@@ -11,13 +8,14 @@ namespace Vyr.Isolation.Context
     {
         private readonly string directory;
         private readonly WeakReference<DirectoryLoadContext> loadContextRef = new WeakReference<DirectoryLoadContext>(null, true);
+        private object contoller;
 
         public ContextIsolation(string directory)
         {
             this.directory = directory;
         }
 
-        public Task IsolateAsync(IsolationConfiguration isolationConfiguration)
+        public async Task IsolateAsync()
         {
             if (!this.loadContextRef.TryGetTarget(out var loadContext))
             {
@@ -27,36 +25,27 @@ namespace Vyr.Isolation.Context
 
             var controllerType = typeof(IsolationController);
             var controllerAssembly = loadContext.LoadFromAssemblyName(controllerType.Assembly.GetName());
-            var controllerType1 = controllerAssembly.GetType(controllerType.FullName);
+            var controllerTypeFromLoadedAssembly = controllerAssembly.GetType(controllerType.FullName);
 
-            var config = JsonConvert.SerializeObject(isolationConfiguration.AgentConfiguration);
-            var contoller = Activator.CreateInstance(controllerType1,
-                loadContext,
-                config);
+            this.contoller = Activator.CreateInstance(controllerTypeFromLoadedAssembly);
 
-            return Task.CompletedTask;
+            await (Task)this.contoller
+                .GetType()
+                .GetMethod("RunAsync")
+                .Invoke(this.contoller, null);
         }
 
-        //public async Task RunAsync()
-        //{
-        //    var runMethod = this.agent.GetType().GetMethod("RunAsync");
-        //    await (Task)runMethod.Invoke(this.agent, new object[] { });
-        //}
-
-        //public async Task IdleAsync()
-        //{
-        //    var runMethod = this.agent.GetType().GetMethod("IdleAsync");
-        //    await (Task)runMethod.Invoke(this.agent, new object[] { });
-        //}
-
-        public Task FreeAsync()
+        public async Task FreeAsync()
         {
+            await (Task)this.contoller
+               .GetType()
+               .GetMethod("IdleAsync")
+               .Invoke(this.contoller, null);
+
             if (this.loadContextRef.TryGetTarget(out var loadContext))
             {
                 loadContext.Unload();
             }
-
-            return Task.CompletedTask;
         }
     }
 }

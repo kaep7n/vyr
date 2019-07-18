@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Reflection;
 using System.Runtime.Loader;
+using System.Threading.Tasks;
 using Vyr.Agents;
 using Vyr.Skills;
 
@@ -9,31 +11,39 @@ namespace Vyr.Isolation.Context
 {
     public class IsolationController
     {
-        private readonly AssemblyLoadContext context;
-        private readonly AgentConfiguration agentConfiguration;
         private readonly IAgent agent;
 
-        public IsolationController(AssemblyLoadContext context, string config)
+        public IsolationController()
         {
-            this.context = context;
-            this.agentConfiguration = JsonConvert.DeserializeObject<AgentConfiguration>(config);
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
 
             var serviceCollection = new ServiceCollection();
 
-            var agentAssembly = this.context.LoadFromAssemblyName(new AssemblyName(this.agentConfiguration.Assembly));
-            var agentType = agentAssembly.GetType(this.agentConfiguration.Type);
-
+            var agent = configuration["agent"];
+            var agentType = Type.GetType(agent);
             serviceCollection.AddTransient(typeof(IAgent), agentType);
 
-            foreach (var skillConfiguration in this.agentConfiguration.SkillConfigurations)
+            foreach (var skillConfiguration in configuration.GetSection("skills").GetChildren())
             {
-                var skillAssembly = this.context.LoadFromAssemblyName(new AssemblyName(skillConfiguration.Assembly));
-                var skillType = agentAssembly.GetType(skillConfiguration.Type);
+                var skill = skillConfiguration.Value;
+                var skillType = Type.GetType(skill);
                 serviceCollection.AddTransient(typeof(ISkill), skillType);
             }
 
             var provider = serviceCollection.BuildServiceProvider();
             this.agent = provider.GetRequiredService<IAgent>();
+        }
+
+        public async Task RunAsync()
+        {
+            await this.agent.RunAsync();
+        }
+
+        public async Task IdleAsync()
+        {
+            await this.agent.IdleAsync();
         }
     }
 }
