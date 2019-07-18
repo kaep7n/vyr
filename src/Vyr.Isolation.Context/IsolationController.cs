@@ -16,7 +16,7 @@ namespace Vyr.Isolation.Context
         public IsolationController()
         {
             var configuration = new ConfigurationBuilder()
-                .AddJsonFile("appsettings.json")
+                .AddJsonFile("vyr.agent.json")
                 .Build();
 
             var serviceCollection = new ServiceCollection();
