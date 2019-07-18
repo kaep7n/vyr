@@ -26,6 +26,13 @@ namespace Vyr.Playground
 
             WriteContexts();
 
+            string input;
+
+            do
+            {
+                input = Console.ReadLine();
+            } while (input != "stop");
+
             Console.WriteLine("stopping host");
             await host.DownAsync();
             Console.WriteLine("stopping host");
