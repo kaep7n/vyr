@@ -20,7 +20,7 @@ steps:
   displayName: 'restore'
   inputs:
     command: 'restore'
-    projects: 'src/vyr.sln'
+    projects: $solution
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
@@ -28,11 +28,11 @@ steps:
   inputs:
     command: 'build'
     configuration: $buildConfiguration
-    projects: 'src/vyr.sln'
+    projects: $solution
 
 - task: DotNetCoreCLI@2
   displayName: 'test'
   inputs:
     command: 'test'
     configuration: $buildConfiguration
-    projects: 'src/vyr.sln'
+    projects: $solution
