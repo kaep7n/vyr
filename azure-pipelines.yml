@@ -20,19 +20,19 @@ steps:
   displayName: 'restore'
   inputs:
     command: 'restore'
-    projects: $solution
+    projects: $(solution)
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
   displayName: 'build'
   inputs:
     command: 'build'
-    configuration: $buildConfiguration
-    projects: $solution
+    configuration: $(buildConfiguration)
+    projects: $(solution)
 
 - task: DotNetCoreCLI@2
   displayName: 'test'
   inputs:
     command: 'test'
-    configuration: $buildConfiguration
-    projects: $solution
+    configuration: $(buildConfiguration)
+    projects: $(solution)
