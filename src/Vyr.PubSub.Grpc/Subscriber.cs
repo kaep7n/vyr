@@ -1,8 +1,7 @@
-﻿using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.WellKnownTypes;
 using PubSub;
 using System;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Vyr.Core;
 using Vyr.Skills;
@@ -73,7 +72,9 @@ namespace Vyr.Playground.Grpc
 
             var responseStream = call.ResponseStream;
 
-            while (await responseStream.MoveNext())
+            var cts = new CancellationTokenSource();
+
+            while (await responseStream.MoveNext(cts.Token))
             {
                 var grpcMessage = responseStream.Current;
             }
