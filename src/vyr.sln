@@ -43,7 +43,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homematic.Skills.Tests", "H
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Homematic.Testing", "Homematic.Testing\Homematic.Testing.csproj", "{96474D42-A67F-4FBF-B64B-48F33A4DAE13}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.PubSub.Grpc", "Vyr.PubSub.Grpc\Vyr.PubSub.Grpc.csproj", "{18B15366-9722-482F-81CE-4CAFD20FDB60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vyr.PubSub.Grpc", "Vyr.PubSub.Grpc\Vyr.PubSub.Grpc.csproj", "{18B15366-9722-482F-81CE-4CAFD20FDB60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".config", ".config", "{667A755D-CE50-4B73-B467-DBF720D188FD}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
