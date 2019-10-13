@@ -6,9 +6,9 @@ using Vyr.Skills;
 
 namespace Vyr.Playground.Agents
 {
-    public class CoreAgent : DataflowAgent
+    public class TestAgent : DataflowAgent
     {
-        public CoreAgent(IEnumerable<ISkill> skills) 
+        public TestAgent(IEnumerable<ISkill> skills) 
             : base(skills)
         {
         }

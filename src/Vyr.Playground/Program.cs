@@ -1,59 +1,35 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System.IO;
-using System.Runtime.Loader;
 using System.Threading.Tasks;
+using Vyr.Core;
 using Vyr.Hosting;
+using Vyr.Isolation;
 using Vyr.Isolation.Context;
 
 namespace Vyr.Playground
 {
-    class Program
+    public class Program
     {
         static async Task Main(string[] args)
         {
-            var isolationStrategy = new ContextIsolationStrategy(Directory.GetCurrentDirectory());
-
-            WriteContexts();
-
-            Console.WriteLine("creating host");
-            var host = new InProcessHost(isolationStrategy);
-            Console.WriteLine("created host");
-
-            Console.WriteLine("starting host");
-            await host.UpAsync();
-            Console.WriteLine("started host");
-
-            WriteContexts();
-
-            string input;
-
-            do
-            {
-                input = Console.ReadLine();
-            } while (input != "stop");
-
-            Console.WriteLine("stopping host");
-            await host.DownAsync();
-            Console.WriteLine("stopping host");
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-
-            WriteContexts();
+            await CreateHostBuilder(args).Build().RunAsync()
+                .ConfigureAwait(false);
         }
 
-        private static void WriteContexts()
-        {
-            foreach (var context in AssemblyLoadContext.All)
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureHostConfiguration(c =>
             {
-                Console.WriteLine("Context: " + context.Name);
+                c.AddJsonFile("vyr.core.json", false);
+            })
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddSingleton<IIsolationStrategy>(p => new ContextIsolationStrategy(Directory.GetCurrentDirectory()));
 
-                foreach (var assembly in context.Assemblies)
-                {
-                    Console.WriteLine("          Assembly: " + assembly.FullName);
-                }
-            }
-        }
+                services.Configure<KernelOptions>(hostContext.Configuration.GetSection("kernel"));
+                services.AddHostedService<Kernel>();
+            });
     }
 }

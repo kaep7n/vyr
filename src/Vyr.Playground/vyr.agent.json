@@ -1,7 +1,0 @@
-{
-  "agent": "Vyr.Playground.Agents.CoreAgent, Vyr.Playground.Agents",
-  "skills": [
-    "Vyr.Playground.Agents.TestSkill1, Vyr.Playground.Agents",
-    "Vyr.Playground.Agents.TestSkill2, Vyr.Playground.Agents"
-  ]
-}

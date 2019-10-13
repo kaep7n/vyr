@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using System;
-using System.Reflection;
-using System.Runtime.Loader;
 using System.Threading.Tasks;
 using Vyr.Agents;
+using Vyr.Core;
 using Vyr.Skills;
 
 namespace Vyr.Isolation.Context
@@ -13,22 +12,23 @@ namespace Vyr.Isolation.Context
     {
         private readonly IAgent agent;
 
-        public IsolationController()
+        public IsolationController(string options)
         {
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("vyr.agent.json")
-                .Build();
+            if (options is null)
+            {
+                throw new ArgumentNullException(nameof(options));
+            }
 
+            var agentOptions = JsonConvert.DeserializeObject<AgentOptions>(options);
             var serviceCollection = new ServiceCollection();
 
-            var agent = configuration["agent"];
+            var agent = agentOptions.Type;
             var agentType = Type.GetType(agent);
             serviceCollection.AddTransient(typeof(IAgent), agentType);
 
-            foreach (var skillConfiguration in configuration.GetSection("skills").GetChildren())
+            foreach (var skill in agentOptions.Skills)
             {
-                var skill = skillConfiguration.Value;
-                var skillType = Type.GetType(skill);
+                var skillType = Type.GetType(skill.Type);
                 serviceCollection.AddTransient(typeof(ISkill), skillType);
             }
 
@@ -38,12 +38,14 @@ namespace Vyr.Isolation.Context
 
         public async Task RunAsync()
         {
-            await this.agent.RunAsync();
+            await this.agent.RunAsync()
+                .ConfigureAwait(false);
         }
 
         public async Task IdleAsync()
         {
-            await this.agent.IdleAsync();
+            await this.agent.IdleAsync()
+                .ConfigureAwait(false);
         }
     }
 }

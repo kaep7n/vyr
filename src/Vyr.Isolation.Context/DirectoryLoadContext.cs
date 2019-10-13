@@ -10,7 +10,7 @@ namespace Vyr.Isolation.Context
         private readonly string directory;
 
         public DirectoryLoadContext(string directory)
-            : base("DirectoryLoadContext", true)
+            : base("VyrLoadContext", true)
         {
             if (directory == null)
             {
@@ -22,6 +22,11 @@ namespace Vyr.Isolation.Context
 
         protected override Assembly Load(AssemblyName assemblyName)
         {
+            if (assemblyName is null)
+            {
+                throw new ArgumentNullException(nameof(assemblyName));
+            }
+
             var assemblyPath = Path.Combine(this.directory, $"{assemblyName.Name}.dll");
 
             if (File.Exists(assemblyPath))
