@@ -78,11 +78,11 @@ namespace Vyr.Hosting
         {
             foreach (var context in AssemblyLoadContext.All)
             {
-                this.logger.LogInformation($"context: {context.Name}");
+                this.logger.LogTrace($"context: {context.Name}");
 
                 foreach (var assembly in context.Assemblies)
                 {
-                    this.logger.LogInformation("assembly: " + assembly.FullName);
+                    this.logger.LogDebug("assembly: " + assembly.FullName);
                 }
             }
         }

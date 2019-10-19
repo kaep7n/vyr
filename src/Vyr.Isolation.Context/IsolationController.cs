@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 using Vyr.Agents;
@@ -19,6 +20,8 @@ namespace Vyr.Isolation.Context
             }
 
             var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddLogging(c => c.AddConsole());
 
             var agent = options.Type;
             var agentType = Type.GetType(agent);

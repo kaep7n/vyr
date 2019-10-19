@@ -11,6 +11,17 @@
             "type": "Vyr.Playground.Agents.TestSkill2, Vyr.Playground.Agents"
           }
         ]
+      },
+      {
+        "type": "Vyr.Playground.Agents.TestAgent, Vyr.Playground.Agents",
+        "skills": [
+          {
+            "type": "Vyr.Playground.Agents.TestSkill1, Vyr.Playground.Agents"
+          },
+          {
+            "type": "Vyr.Playground.Agents.TestSkill2, Vyr.Playground.Agents"
+          }
+        ]
       }
     ]
   }
