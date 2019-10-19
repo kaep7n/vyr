@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,22 +11,29 @@ namespace Vyr.Playground.Agents
 {
     public class TestAgent : DataflowAgent
     {
+        private readonly IConfiguration configuration;
         private readonly ILogger<TestAgent> logger;
 
-        public TestAgent(IEnumerable<ISkill> skills, ILogger<TestAgent> logger) 
+        public TestAgent(IEnumerable<ISkill> skills, IConfiguration configuration, ILogger<TestAgent> logger) 
             : base(skills)
         {
+            if (configuration is null)
+            {
+                throw new ArgumentNullException(nameof(configuration));
+            }
+
             if (logger is null)
             {
                 throw new ArgumentNullException(nameof(logger));
             }
 
+            this.configuration = configuration;
             this.logger = logger;
         }
 
         public override Task RunAsync()
         {
-            this.logger.LogInformation("running test agent");
+            this.logger.LogInformation($"running test agent with name {this.configuration["name"]}");
             return base.RunAsync();
         }
 

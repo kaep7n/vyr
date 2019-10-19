@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
@@ -19,9 +20,13 @@ namespace Vyr.Isolation.Context
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var serviceCollection = new ServiceCollection();
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("vyr.agent.test.json")
+                .Build();
 
+            var serviceCollection = new ServiceCollection();
             serviceCollection.AddLogging(c => c.AddConsole());
+            serviceCollection.AddSingleton<IConfiguration>(configuration);
 
             var agent = options.Type;
             var agentType = Type.GetType(agent);

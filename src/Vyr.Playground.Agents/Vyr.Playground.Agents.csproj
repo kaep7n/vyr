@@ -15,4 +15,10 @@
     <ProjectReference Include="..\Vyr.Agents\Vyr.Agents.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="vyr.agent.test.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
