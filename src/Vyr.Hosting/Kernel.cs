@@ -3,13 +3,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
 using Vyr.Core;
 using Vyr.Isolation;
-using Vyr.Isolation.Context;
 
 namespace Vyr.Hosting
 {

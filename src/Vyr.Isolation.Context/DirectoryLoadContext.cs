@@ -27,6 +27,11 @@ namespace Vyr.Isolation.Context
                 throw new ArgumentNullException(nameof(assemblyName));
             }
 
+            if(assemblyName.Name == "Vyr.Core")
+            {
+                return Default.LoadFromAssemblyName(assemblyName);
+            }
+
             var assemblyPath = Path.Combine(this.directory, $"{assemblyName.Name}.dll");
 
             if (File.Exists(assemblyPath))

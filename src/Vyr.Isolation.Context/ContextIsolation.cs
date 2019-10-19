@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Reflection;
 using System.Threading.Tasks;
 using Vyr.Core;
 
@@ -9,7 +10,7 @@ namespace Vyr.Isolation.Context
     {
         private readonly string directory;
         private readonly WeakReference<DirectoryLoadContext> loadContextRef = new WeakReference<DirectoryLoadContext>(null, true);
-        private object contoller;
+        private IIsolationController contoller;
 
         public ContextIsolation(string directory)
         {
@@ -29,27 +30,25 @@ namespace Vyr.Isolation.Context
                 this.loadContextRef.SetTarget(loadContext);
             }
 
+            this.contoller = DispatchProxy.Create<IIsolationController, IsolationControllerProxy>();
+
             var controllerType = typeof(IsolationController);
             var controllerAssembly = loadContext.LoadFromAssemblyName(controllerType.Assembly.GetName());
             var controllerTypeFromLoadedAssembly = controllerAssembly.GetType(controllerType.FullName);
-            var serializedOptions = JsonConvert.SerializeObject(options);
 
-            this.contoller = Activator.CreateInstance(controllerTypeFromLoadedAssembly, serializedOptions);
+            var target = Activator.CreateInstance(controllerTypeFromLoadedAssembly, options);
 
-            await ((Task)this.contoller
-                .GetType()
-                .GetMethod("RunAsync")
-                .Invoke(this.contoller, null))
+            ((IsolationControllerProxy)this.contoller).SetTarget(target);
+
+            await this.contoller.RunAsync()
                 .ConfigureAwait(false);
         }
 
         public async Task FreeAsync()
         {
-            await ((Task)this.contoller
-               .GetType()
-               .GetMethod("IdleAsync")
-               .Invoke(this.contoller, null))
-               .ConfigureAwait(false);
+            await this.contoller.IdleAsync()
+                .ConfigureAwait(false);
+
 
             if (this.loadContextRef.TryGetTarget(out var loadContext))
             {
