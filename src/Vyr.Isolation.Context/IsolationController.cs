@@ -1,11 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Vyr.Agents;
 using Vyr.Core;
-using Vyr.Skills;
 
 namespace Vyr.Isolation.Context
 {
@@ -20,26 +16,26 @@ namespace Vyr.Isolation.Context
                 throw new ArgumentNullException(nameof(options));
             }
 
-            var configuration = new ConfigurationBuilder()
-                .AddJsonFile("vyr.agent.test.json")
-                .Build();
+            //var configuration = new ConfigurationBuilder()
+            //    .AddJsonFile("vyr.agent.test.json")
+            //    .Build();
 
-            var serviceCollection = new ServiceCollection();
-            serviceCollection.AddLogging(c => c.AddConsole());
-            serviceCollection.AddSingleton<IConfiguration>(configuration);
+            //var serviceCollection = new ServiceCollection();
+            //serviceCollection.AddLogging(c => c.AddConsole());
+            //serviceCollection.AddSingleton<IConfiguration>(configuration);
 
-            var agent = options.Type;
-            var agentType = Type.GetType(agent);
-            serviceCollection.AddTransient(typeof(IAgent), agentType);
+            //var agent = options.Type;
+            //var agentType = Type.GetType(agent);
+            //serviceCollection.AddTransient(typeof(IAgent), agentType);
 
-            foreach (var skill in options.Skills)
-            {
-                var skillType = Type.GetType(skill.Type);
-                serviceCollection.AddTransient(typeof(ISkill), skillType);
-            }
+            //foreach (var skill in options.Skills)
+            //{
+            //    var skillType = Type.GetType(skill.Type);
+            //    serviceCollection.AddTransient(typeof(ISkill), skillType);
+            //}
 
-            var provider = serviceCollection.BuildServiceProvider();
-            this.agent = provider.GetRequiredService<IAgent>();
+            //var provider = serviceCollection.BuildServiceProvider();
+            //this.agent = provider.GetRequiredService<IAgent>();
         }
 
         public async Task RunAsync()
