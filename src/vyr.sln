@@ -56,6 +56,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".ci", ".ci", "{4267676A-914
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Core.Hosting.Docker", "Vyr.Core.Hosting.Docker\Vyr.Core.Hosting.Docker.csproj", "{347CE755-0783-46BF-9F62-2FD1A8EE8D34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vyr.Playground.Docker", "Vyr.Playground.Docker\Vyr.Playground.Docker.csproj", "{96ED164D-9A06-4F4C-9F6C-FB7BA3340EF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -134,6 +138,14 @@ Global
 		{18B15366-9722-482F-81CE-4CAFD20FDB60}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18B15366-9722-482F-81CE-4CAFD20FDB60}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18B15366-9722-482F-81CE-4CAFD20FDB60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{347CE755-0783-46BF-9F62-2FD1A8EE8D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{347CE755-0783-46BF-9F62-2FD1A8EE8D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{347CE755-0783-46BF-9F62-2FD1A8EE8D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{347CE755-0783-46BF-9F62-2FD1A8EE8D34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96ED164D-9A06-4F4C-9F6C-FB7BA3340EF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96ED164D-9A06-4F4C-9F6C-FB7BA3340EF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96ED164D-9A06-4F4C-9F6C-FB7BA3340EF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96ED164D-9A06-4F4C-9F6C-FB7BA3340EF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -157,6 +169,8 @@ Global
 		{C6FD8674-7327-4B3D-8723-DA94BFD56226} = {8265A5DC-BBF7-46D4-8918-8B7F53A37D9E}
 		{96474D42-A67F-4FBF-B64B-48F33A4DAE13} = {8265A5DC-BBF7-46D4-8918-8B7F53A37D9E}
 		{18B15366-9722-482F-81CE-4CAFD20FDB60} = {707FAE37-3F9F-4F79-9B92-16C68C3B01B7}
+		{347CE755-0783-46BF-9F62-2FD1A8EE8D34} = {707FAE37-3F9F-4F79-9B92-16C68C3B01B7}
+		{96ED164D-9A06-4F4C-9F6C-FB7BA3340EF2} = {E0CDBD51-6358-4829-8B98-8938500E2421}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C2832708-A738-47A9-84CE-99135374F414}
